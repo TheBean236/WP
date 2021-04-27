@@ -1,85 +1,71 @@
 Version 3.2 HI-TECH Software Intermediate Code
-"50 device_config.c
-[p x PLLSEL=PLL4X ]
-"51
-[p x CFGPLLEN=OFF ]
-"52
-[p x CPUDIV=NOCLKDIV ]
-"53
-[p x LS48MHZ=SYS24X4 ]
-"56
-[p x FOSC=HSM ]
-"57
-[p x PCLKEN=ON ]
-"58
+"125 device_config.c
+[p x PLLDIV=2 ]
+"126
+[p x CPUDIV=OSC1_PLL2 ]
+"127
+[p x USBDIV=2 ]
+"130
+[p x FOSC=HS ]
+"131
 [p x FCMEN=OFF ]
-"59
+"132
 [p x IESO=OFF ]
-"62
-[p x nPWRTEN=OFF ]
-"63
-[p x BOREN=SBORDIS ]
-"64
-[p x BORV=190 ]
-"65
-[p x nLPBOR=OFF ]
-"68
-[p x WDTEN=OFF ]
-"69
+"135
+[p x PWRT=OFF ]
+"136
+[p x BOR=OFF ]
+"137
+[p x BORV=2 ]
+"138
+[p x VREGEN=OFF ]
+"141
+[p x WDT=OFF ]
+"142
 [p x WDTPS=32768 ]
-"72
-[p x CCP2MX=RC1 ]
-"73
-[p x PBADEN=ON ]
-"74
-[p x T3CMX=RC0 ]
-"75
-[p x SDOMX=RB3 ]
-"76
+"145
+[p x CCP2MX=ON ]
+"146
+[p x PBADEN=OFF ]
+"147
+[p x LPT1OSC=OFF ]
+"148
 [p x MCLRE=ON ]
-"79
+"151
 [p x STVREN=ON ]
-"80
-[p x LVP=ON ]
-"81
-[p x ICPRT=OFF ]
-"82
+"152
+[p x LVP=OFF ]
+"153
 [p x XINST=OFF ]
-"83
+"154
 [p x DEBUG=OFF ]
-"86
+"157
 [p x CP0=OFF ]
-"87
+"158
 [p x CP1=OFF ]
-"88
+"159
 [p x CP2=OFF ]
-"89
-[p x CP3=OFF ]
-"92
+"162
 [p x CPB=OFF ]
-"93
+"163
 [p x CPD=OFF ]
-"96
+"166
 [p x WRT0=OFF ]
-"97
+"167
 [p x WRT1=OFF ]
-"98
+"168
 [p x WRT2=OFF ]
-"99
-[p x WRT3=OFF ]
-"102
+"171
 [p x WRTC=OFF ]
-"103
+"172
 [p x WRTB=OFF ]
-"104
+"173
 [p x WRTD=OFF ]
-"107
+"176
 [p x EBTR0=OFF ]
-"108
+"177
 [p x EBTR1=OFF ]
-"109
+"178
 [p x EBTR2=OFF ]
-"110
-[p x EBTR3=OFF ]
-"113
+"181
 [p x EBTRB=OFF ]

@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=Interrupt_Mgr.c SysInit.c Timer_0.c Timer_2.c Timer_3.c main.c device_config.c pin_manager.c CCP1.c CCP2.c LCD.c Timer_1.c
+SOURCEFILES_QUOTED_IF_SPACED=Interrupt_Mgr.c SysInit.c Timer_0.c Timer_2.c Timer_3.c main.c pin_manager.c CCP1.c CCP2.c LCD.c Timer_1.c device_config.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/Interrupt_Mgr.p1 ${OBJECTDIR}/SysInit.p1 ${OBJECTDIR}/Timer_0.p1 ${OBJECTDIR}/Timer_2.p1 ${OBJECTDIR}/Timer_3.p1 ${OBJECTDIR}/main.p1 ${OBJECTDIR}/device_config.p1 ${OBJECTDIR}/pin_manager.p1 ${OBJECTDIR}/CCP1.p1 ${OBJECTDIR}/CCP2.p1 ${OBJECTDIR}/LCD.p1 ${OBJECTDIR}/Timer_1.p1
-POSSIBLE_DEPFILES=${OBJECTDIR}/Interrupt_Mgr.p1.d ${OBJECTDIR}/SysInit.p1.d ${OBJECTDIR}/Timer_0.p1.d ${OBJECTDIR}/Timer_2.p1.d ${OBJECTDIR}/Timer_3.p1.d ${OBJECTDIR}/main.p1.d ${OBJECTDIR}/device_config.p1.d ${OBJECTDIR}/pin_manager.p1.d ${OBJECTDIR}/CCP1.p1.d ${OBJECTDIR}/CCP2.p1.d ${OBJECTDIR}/LCD.p1.d ${OBJECTDIR}/Timer_1.p1.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/Interrupt_Mgr.p1 ${OBJECTDIR}/SysInit.p1 ${OBJECTDIR}/Timer_0.p1 ${OBJECTDIR}/Timer_2.p1 ${OBJECTDIR}/Timer_3.p1 ${OBJECTDIR}/main.p1 ${OBJECTDIR}/pin_manager.p1 ${OBJECTDIR}/CCP1.p1 ${OBJECTDIR}/CCP2.p1 ${OBJECTDIR}/LCD.p1 ${OBJECTDIR}/Timer_1.p1 ${OBJECTDIR}/device_config.p1
+POSSIBLE_DEPFILES=${OBJECTDIR}/Interrupt_Mgr.p1.d ${OBJECTDIR}/SysInit.p1.d ${OBJECTDIR}/Timer_0.p1.d ${OBJECTDIR}/Timer_2.p1.d ${OBJECTDIR}/Timer_3.p1.d ${OBJECTDIR}/main.p1.d ${OBJECTDIR}/pin_manager.p1.d ${OBJECTDIR}/CCP1.p1.d ${OBJECTDIR}/CCP2.p1.d ${OBJECTDIR}/LCD.p1.d ${OBJECTDIR}/Timer_1.p1.d ${OBJECTDIR}/device_config.p1.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/Interrupt_Mgr.p1 ${OBJECTDIR}/SysInit.p1 ${OBJECTDIR}/Timer_0.p1 ${OBJECTDIR}/Timer_2.p1 ${OBJECTDIR}/Timer_3.p1 ${OBJECTDIR}/main.p1 ${OBJECTDIR}/device_config.p1 ${OBJECTDIR}/pin_manager.p1 ${OBJECTDIR}/CCP1.p1 ${OBJECTDIR}/CCP2.p1 ${OBJECTDIR}/LCD.p1 ${OBJECTDIR}/Timer_1.p1
+OBJECTFILES=${OBJECTDIR}/Interrupt_Mgr.p1 ${OBJECTDIR}/SysInit.p1 ${OBJECTDIR}/Timer_0.p1 ${OBJECTDIR}/Timer_2.p1 ${OBJECTDIR}/Timer_3.p1 ${OBJECTDIR}/main.p1 ${OBJECTDIR}/pin_manager.p1 ${OBJECTDIR}/CCP1.p1 ${OBJECTDIR}/CCP2.p1 ${OBJECTDIR}/LCD.p1 ${OBJECTDIR}/Timer_1.p1 ${OBJECTDIR}/device_config.p1
 
 # Source Files
-SOURCEFILES=Interrupt_Mgr.c SysInit.c Timer_0.c Timer_2.c Timer_3.c main.c device_config.c pin_manager.c CCP1.c CCP2.c LCD.c Timer_1.c
+SOURCEFILES=Interrupt_Mgr.c SysInit.c Timer_0.c Timer_2.c Timer_3.c main.c pin_manager.c CCP1.c CCP2.c LCD.c Timer_1.c device_config.c
 
 
 
@@ -90,7 +90,7 @@ ifneq ($(INFORMATION_MESSAGE), )
 endif
 	${MAKE}  -f nbproject/Makefile-default.mk dist/${CND_CONF}/${IMAGE_TYPE}/MPLab.${IMAGE_TYPE}.${OUTPUT_SUFFIX}
 
-MP_PROCESSOR_OPTION=18F45K50
+MP_PROCESSOR_OPTION=18F2455
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: compile
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
@@ -142,14 +142,6 @@ ${OBJECTDIR}/main.p1: main.c  nbproject/Makefile-${CND_CONF}.mk
 	@-${MV} ${OBJECTDIR}/main.d ${OBJECTDIR}/main.p1.d 
 	@${FIXDEPS} ${OBJECTDIR}/main.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
-${OBJECTDIR}/device_config.p1: device_config.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/device_config.p1.d 
-	@${RM} ${OBJECTDIR}/device_config.p1 
-	${MP_CC} $(MP_EXTRA_CC_PRE) -mcpu=$(MP_PROCESSOR_OPTION) -c  -D__DEBUG=1   -mdfp="${DFP_DIR}/xc8"  -fno-short-double -fno-short-float -memi=wordwrite -O0 -fasmfile -maddrqual=ignore -xassembler-with-cpp -mwarn=-3 -Wa,-a -DXPRJ_default=$(CND_CONF)  -msummary=-psect,-class,+mem,-hex,-file  -ginhx032 -Wl,--data-init -mno-keep-startup -mno-download -mdefault-config-bits $(COMPARISON_BUILD)  -std=c90 -gdwarf-3 -mstack=compiled:auto:auto:auto     -o ${OBJECTDIR}/device_config.p1 device_config.c 
-	@-${MV} ${OBJECTDIR}/device_config.d ${OBJECTDIR}/device_config.p1.d 
-	@${FIXDEPS} ${OBJECTDIR}/device_config.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
-	
 ${OBJECTDIR}/pin_manager.p1: pin_manager.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/pin_manager.p1.d 
@@ -189,6 +181,14 @@ ${OBJECTDIR}/Timer_1.p1: Timer_1.c  nbproject/Makefile-${CND_CONF}.mk
 	${MP_CC} $(MP_EXTRA_CC_PRE) -mcpu=$(MP_PROCESSOR_OPTION) -c  -D__DEBUG=1   -mdfp="${DFP_DIR}/xc8"  -fno-short-double -fno-short-float -memi=wordwrite -O0 -fasmfile -maddrqual=ignore -xassembler-with-cpp -mwarn=-3 -Wa,-a -DXPRJ_default=$(CND_CONF)  -msummary=-psect,-class,+mem,-hex,-file  -ginhx032 -Wl,--data-init -mno-keep-startup -mno-download -mdefault-config-bits $(COMPARISON_BUILD)  -std=c90 -gdwarf-3 -mstack=compiled:auto:auto:auto     -o ${OBJECTDIR}/Timer_1.p1 Timer_1.c 
 	@-${MV} ${OBJECTDIR}/Timer_1.d ${OBJECTDIR}/Timer_1.p1.d 
 	@${FIXDEPS} ${OBJECTDIR}/Timer_1.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
+	
+${OBJECTDIR}/device_config.p1: device_config.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/device_config.p1.d 
+	@${RM} ${OBJECTDIR}/device_config.p1 
+	${MP_CC} $(MP_EXTRA_CC_PRE) -mcpu=$(MP_PROCESSOR_OPTION) -c  -D__DEBUG=1   -mdfp="${DFP_DIR}/xc8"  -fno-short-double -fno-short-float -memi=wordwrite -O0 -fasmfile -maddrqual=ignore -xassembler-with-cpp -mwarn=-3 -Wa,-a -DXPRJ_default=$(CND_CONF)  -msummary=-psect,-class,+mem,-hex,-file  -ginhx032 -Wl,--data-init -mno-keep-startup -mno-download -mdefault-config-bits $(COMPARISON_BUILD)  -std=c90 -gdwarf-3 -mstack=compiled:auto:auto:auto     -o ${OBJECTDIR}/device_config.p1 device_config.c 
+	@-${MV} ${OBJECTDIR}/device_config.d ${OBJECTDIR}/device_config.p1.d 
+	@${FIXDEPS} ${OBJECTDIR}/device_config.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
 else
 ${OBJECTDIR}/Interrupt_Mgr.p1: Interrupt_Mgr.c  nbproject/Makefile-${CND_CONF}.mk
@@ -239,14 +239,6 @@ ${OBJECTDIR}/main.p1: main.c  nbproject/Makefile-${CND_CONF}.mk
 	@-${MV} ${OBJECTDIR}/main.d ${OBJECTDIR}/main.p1.d 
 	@${FIXDEPS} ${OBJECTDIR}/main.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
-${OBJECTDIR}/device_config.p1: device_config.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/device_config.p1.d 
-	@${RM} ${OBJECTDIR}/device_config.p1 
-	${MP_CC} $(MP_EXTRA_CC_PRE) -mcpu=$(MP_PROCESSOR_OPTION) -c   -mdfp="${DFP_DIR}/xc8"  -fno-short-double -fno-short-float -memi=wordwrite -O0 -fasmfile -maddrqual=ignore -xassembler-with-cpp -mwarn=-3 -Wa,-a -DXPRJ_default=$(CND_CONF)  -msummary=-psect,-class,+mem,-hex,-file  -ginhx032 -Wl,--data-init -mno-keep-startup -mno-download -mdefault-config-bits $(COMPARISON_BUILD)  -std=c90 -gdwarf-3 -mstack=compiled:auto:auto:auto     -o ${OBJECTDIR}/device_config.p1 device_config.c 
-	@-${MV} ${OBJECTDIR}/device_config.d ${OBJECTDIR}/device_config.p1.d 
-	@${FIXDEPS} ${OBJECTDIR}/device_config.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
-	
 ${OBJECTDIR}/pin_manager.p1: pin_manager.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/pin_manager.p1.d 
@@ -287,6 +279,14 @@ ${OBJECTDIR}/Timer_1.p1: Timer_1.c  nbproject/Makefile-${CND_CONF}.mk
 	@-${MV} ${OBJECTDIR}/Timer_1.d ${OBJECTDIR}/Timer_1.p1.d 
 	@${FIXDEPS} ${OBJECTDIR}/Timer_1.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
+${OBJECTDIR}/device_config.p1: device_config.c  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/device_config.p1.d 
+	@${RM} ${OBJECTDIR}/device_config.p1 
+	${MP_CC} $(MP_EXTRA_CC_PRE) -mcpu=$(MP_PROCESSOR_OPTION) -c   -mdfp="${DFP_DIR}/xc8"  -fno-short-double -fno-short-float -memi=wordwrite -O0 -fasmfile -maddrqual=ignore -xassembler-with-cpp -mwarn=-3 -Wa,-a -DXPRJ_default=$(CND_CONF)  -msummary=-psect,-class,+mem,-hex,-file  -ginhx032 -Wl,--data-init -mno-keep-startup -mno-download -mdefault-config-bits $(COMPARISON_BUILD)  -std=c90 -gdwarf-3 -mstack=compiled:auto:auto:auto     -o ${OBJECTDIR}/device_config.p1 device_config.c 
+	@-${MV} ${OBJECTDIR}/device_config.d ${OBJECTDIR}/device_config.p1.d 
+	@${FIXDEPS} ${OBJECTDIR}/device_config.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
+	
 endif
 
 # ------------------------------------------------------------------------------------
@@ -306,7 +306,7 @@ endif
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
 dist/${CND_CONF}/${IMAGE_TYPE}/MPLab.${IMAGE_TYPE}.${OUTPUT_SUFFIX}: ${OBJECTFILES}  nbproject/Makefile-${CND_CONF}.mk    
 	@${MKDIR} dist/${CND_CONF}/${IMAGE_TYPE} 
-	${MP_CC} $(MP_EXTRA_LD_PRE) -mcpu=$(MP_PROCESSOR_OPTION) -Wl,-Map=dist/${CND_CONF}/${IMAGE_TYPE}/MPLab.${IMAGE_TYPE}.map  -D__DEBUG=1  -DXPRJ_default=$(CND_CONF)  -Wl,--defsym=__MPLAB_BUILD=1   -mdfp="${DFP_DIR}/xc8"  -fno-short-double -fno-short-float -memi=wordwrite -O0 -fasmfile -maddrqual=ignore -xassembler-with-cpp -mwarn=-3 -Wa,-a -msummary=-psect,-class,+mem,-hex,-file  -ginhx032 -Wl,--data-init -mno-keep-startup -mno-download -mdefault-config-bits -std=c90 -gdwarf-3 -mstack=compiled:auto:auto:auto        $(COMPARISON_BUILD) -Wl,--memorysummary,dist/${CND_CONF}/${IMAGE_TYPE}/memoryfile.xml -o dist/${CND_CONF}/${IMAGE_TYPE}/MPLab.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX}  ${OBJECTFILES_QUOTED_IF_SPACED}     
+	${MP_CC} $(MP_EXTRA_LD_PRE) -mcpu=$(MP_PROCESSOR_OPTION) -Wl,-Map=dist/${CND_CONF}/${IMAGE_TYPE}/MPLab.${IMAGE_TYPE}.map  -D__DEBUG=1  -DXPRJ_default=$(CND_CONF)  -Wl,--defsym=__MPLAB_BUILD=1   -mdfp="${DFP_DIR}/xc8"  -fno-short-double -fno-short-float -memi=wordwrite -O0 -fasmfile -maddrqual=ignore -xassembler-with-cpp -mwarn=-3 -Wa,-a -msummary=-psect,-class,+mem,-hex,-file  -ginhx032 -Wl,--data-init -mno-keep-startup -mno-download -mdefault-config-bits -std=c90 -gdwarf-3 -mstack=compiled:auto:auto:auto     -mrom=default,-5d40-5fff -mram=default,-3ef-3ff,-f9c-f9c,-fd4-fd4,-fdb-fdf,-fe3-fe7,-feb-fef,-ffc-ffc,-ffd-fff  $(COMPARISON_BUILD) -Wl,--memorysummary,dist/${CND_CONF}/${IMAGE_TYPE}/memoryfile.xml -o dist/${CND_CONF}/${IMAGE_TYPE}/MPLab.${IMAGE_TYPE}.${DEBUGGABLE_SUFFIX}  ${OBJECTFILES_QUOTED_IF_SPACED}     
 	@${RM} dist/${CND_CONF}/${IMAGE_TYPE}/MPLab.${IMAGE_TYPE}.hex 
 	
 else

@@ -5,8 +5,13 @@
         <group>
             <file>file:/C:/Users/MBend/OneDrive/Electronics/WaterDepth/MPLab/LCD.c</file>
             <file>file:/C:/Users/MBend/OneDrive/Electronics/WaterDepth/MPLab/Timer_0.c</file>
+            <file>file:/C:/Program%20Files/Microchip/xc8/v2.32/pic/sources/c90/common/doprnt.c</file>
+            <file>file:/C:/Users/MBend/OneDrive/Electronics/WaterDepth/MPLab/CCP1.c</file>
             <file>file:/C:/Users/MBend/OneDrive/Electronics/WaterDepth/MPLab/Master.h</file>
+            <file>file:/C:/Users/MBend/OneDrive/Electronics/WaterDepth/MPLab/Timer_2.c</file>
             <file>file:/C:/Users/MBend/OneDrive/Electronics/WaterDepth/MPLab/LCD.h</file>
+            <file>file:/C:/Users/MBend/OneDrive/Electronics/WaterDepth/MPLab/Timer_1.c</file>
+            <file>file:/C:/Users/MBend/OneDrive/Electronics/WaterDepth/MPLab/Timer0.h</file>
             <file>file:/C:/Users/MBend/OneDrive/Electronics/WaterDepth/MPLab/main.c</file>
             <file>file:/C:/Users/MBend/OneDrive/Electronics/WaterDepth/MPLab/Timer_3.c</file>
         </group>

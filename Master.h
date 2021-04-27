@@ -14,13 +14,21 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#ifdef _18F45K50
+#define NumPins     40
+#endif
+#ifdef _18F2455
+#define NumPins     28
+#endif
+
+
 #define _XTAL_FREQ  8000000
 #define S_Clock     8000000
 #define I_Clock     2000000
 // Timer 0 (Time-of-Day)
 #define T0_Period   1
 #define T0_LED_Toggle() do { LATCbits.LATC0 = ~LATCbits.LATC0; } while(0)
-
+#define LCD_BL_Toggle() do { LATAbits.LATA4 = ~LATAbits.LATA4; } while(0)
 typedef union EchoPeriod_tag
 {
    struct
@@ -33,7 +41,7 @@ typedef union EchoPeriod_tag
       uint16_t EP16;
    };
 } EchoPeriod_t;
-EchoPeriod_t giEchoCounter;
+volatile EchoPeriod_t giEchoCounter;
 
 // Timer 1 (Echo Timer) is in uS
 #define T1_Period   0.5f           
@@ -49,7 +57,10 @@ EchoPeriod_t giEchoCounter;
 #define T3_Prescale     8
 #define T3_Period       5
 #define T3_Freq         (1000 / T3_Period)
-#define T3_SampeRate    200
+#define T3_SampeRate    10
+
+// Sample Rate is in number of 5 ms increments (e.g. 10 = 1/2 second)
+#define gcSampleRate    10
 
 // Pin Definitions  (Write to latch, read from port)
 #define Pin_Echo_Detect PORTCbits.CCP1
@@ -58,6 +69,7 @@ EchoPeriod_t giEchoCounter;
 #define Pin_LCD_E       LATAbits.LATA1
 #define Pin_LCD_RW      LATAbits.LATA2
 #define Pin_LCD_RS      LATAbits.LATA3
+#define Pin_LCD_BackLite LATAbits.LATA4
 
 // Display Strings
 volatile char gsCurrDate[] = "01/04/21";
@@ -77,6 +89,15 @@ uint8_t giHours  = 0;
 uint8_t giDay   = 1;
 uint8_t giMonth = 4;
 uint8_t giYear  = 21;
+
+// biBacklightTimer increments every second from TMR0. 
+// the main routine clears the counter upon detection of 
+// a push-button request to turn on the LCD backlight. 
+// Main also checks the counter for when to turn off
+// the backlight.
+// It's okay if it overflows. noone cares. 
+uint16_t    giBacklight_Timer = 0;
+
 // DEFINE MODE: Test or Normal
 #define Test_Mode
 //#Define Normal_Mode

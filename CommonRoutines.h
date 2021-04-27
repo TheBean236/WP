@@ -36,10 +36,9 @@ void Timer3_Init(void);
 void Timer3_ISR (void);
 #endif
 
-#ifndef CCP1_H
 void CCP1_Init  (void);
 void CCP1_ISR   (void);
-#endif
+void CCP1_Activate (void);
 
 #ifndef CCP2_H
 void CCP2_Init  (void);

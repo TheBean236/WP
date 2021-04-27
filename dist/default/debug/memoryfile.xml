@@ -3,15 +3,15 @@
   <executable name="dist/default/debug\MPLab.debug.hex">
     <memory name="program">
       <units>bytes</units>
-      <length>32768</length>
-      <used>17792</used>
-      <free>14976</free>
+      <length>24576</length>
+      <used>12676</used>
+      <free>11900</free>
     </memory>
     <memory name="data">
       <units>bytes</units>
       <length>2048</length>
-      <used>399</used>
-      <free>1649</free>
+      <used>463</used>
+      <free>1585</free>
     </memory>
   </executable>
 </project>

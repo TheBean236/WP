@@ -1,7 +1,7 @@
 
 # 1 "C:\Program Files\Microchip\xc8\v2.20\pic\sources\c90\common\doprnt.c"
 
-# 4 "C:/Program Files (x86)/Microchip/MPLABX/v5.40/packs/Microchip/PIC18F-K_DFP/1.4.87/xc8\pic\include\__size_t.h"
+# 4 "C:/Program Files (x86)/Microchip/MPLABX/v5.40/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\__size_t.h"
 typedef unsigned size_t;
 
 # 7 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\stdarg.h"
@@ -224,22 +224,54 @@ extern double round(double);
 #pragma warning disable 350
 
 # 358
-const static unsigned int dpowers[] = {1, 10, 100, 1000, 10000,
+const static unsigned long dpowers[] = {1, 10, 100, 1000, 10000,
 
-# 363
+100000, 1000000, 10000000, 100000000,
+1000000000
+
 };
 
-
-const static unsigned int hexpowers[] = {1, 0x10, 0x100, 0x1000,
-
-# 370
-};
+# 396
+extern const double _powers_[], _npowers_[];
 
 
-const static unsigned int octpowers[] = {1, 010, 0100, 01000, 010000, 0100000,
 
-# 381
-};
+extern unsigned long _div_to_l_(double, double);
+
+extern unsigned long _tdiv_to_l_(float, float);
+
+# 416
+static double
+fround(unsigned char prec)
+{
+
+
+if(prec>=110)
+return 0.5 * _npowers_[prec/100U+18U] * _npowers_[(prec%100U)/10U+9U] * _npowers_[prec%10U];
+else if(prec > 10)
+return 0.5 * _npowers_[prec/10U+9U] * _npowers_[prec%10U];
+return 0.5 * _npowers_[prec];
+}
+
+# 432
+static double
+scale(signed char scl)
+{
+
+if(scl < 0) {
+scl = -scl;
+if(scl>=110)
+return _npowers_[(unsigned char)(scl/100+18)] * _npowers_[(unsigned char)((scl%100)/10+9)] * _npowers_[(unsigned char)(scl%10)];
+else if(scl > 10)
+return _npowers_[(unsigned char)(scl/10+9)] * _npowers_[(unsigned char)(scl%10)];
+return _npowers_[(unsigned char)scl];
+}
+if(scl>=110)
+return _powers_[(unsigned char)(scl/100+18)] * _powers_[(unsigned char)((scl%100)/10+9)] * _powers_[(unsigned char)(scl%10)];
+else if(scl > 10)
+return _powers_[(unsigned char)(scl/10+9)] * _powers_[(unsigned char)(scl%10)];
+return _powers_[(unsigned char)scl];
+}
 
 # 463
 int
@@ -256,12 +288,16 @@ char c;
 
 int width;
 
-# 521
-signed char prec;
 
+int prec;
 
-
+# 525
 unsigned short flag;
+
+# 532
+char d;
+double fval;
+int eexp;
 
 # 540
 union {
@@ -269,7 +305,7 @@ unsigned long vd;
 double integ;
 } tmpval;
 
-unsigned int val;
+unsigned long val;
 unsigned len;
 const char * cp;
 
@@ -291,42 +327,7 @@ width = 0;
 
 flag = 0;
 
-for(;;) {
-switch(*f) {
-
-case '-':
-flag |= 0x08;
-f++;
-continue;
-
-
-
-case ' ':
-flag |= 0x01;
-f++;
-continue;
-
-# 590
-case '#':
-flag |= 0x800;
-f++;
-continue;
-
-
-case '0':
-flag |= 0x04;
-f++;
-continue;
-
-}
-break;
-}
-
-# 610
-if(flag & 0x08)
-flag &= ~0x04;
-
-
+# 614
 if(isdigit((unsigned)*f)) {
 width = 0;
 do {
@@ -334,10 +335,7 @@ width *= 10;
 width += *f++ - '0';
 } while(isdigit((unsigned)*f));
 
-} else if(*f == '*') {
-width = (*(int *)__va_arg((*(int **)ap), (int)0));
-f++;
-
+# 625
 }
 
 
@@ -345,17 +343,7 @@ if(*f == '.') {
 flag |= 0x4000;
 f++;
 
-if(*f == '*') {
-prec = (*(int *)__va_arg((*(int **)ap), (int)0));
-if (prec < 0) {
-prec = 0;
-flag &= ~0x4000;
-
-# 640
-}
-f++;
-} else
-
+# 644
 {
 prec = 0;
 while(isdigit((unsigned)*f)) {
@@ -366,7 +354,8 @@ prec += *f++ - '0';
 } else {
 prec = 0;
 
-# 656
+flag |= 0x1000;
+
 }
 
 # 661
@@ -375,31 +364,14 @@ switch(c = *f++) {
 case 0:
 goto alldone;
 
-# 715
-case 'o':
-
-flag |= 0x40;
-
+# 688
+case 'f':
+flag |= 0x400;
 break;
 
-
-
+# 723
 case 'd':
 case 'i':
-break;
-
-# 738
-case 'X':
-
-flag |= 0x20;
-
-
-
-case 'x':
-
-
-flag |= 0x80;
-
 break;
 
 # 776
@@ -407,7 +379,7 @@ dostring:
 
 
 if(prec && (prec < ((int)len)))
-len = (unsigned char)prec;
+len = (unsigned int)prec;
 
 
 if(((unsigned)width) > len)
@@ -415,27 +387,17 @@ width -= len;
 else
 width = 0;
 
-if(!(flag & 0x08))
-
+# 790
 while(width--)
 ((*sp++ = (' ')));
 
 while(len--)
 ((*sp++ = (*cp++)));
 
-if(flag & 0x08)
-while(width--)
-((*sp++ = (' ')));
-
+# 800
 continue;
 
-# 810
-case 'c':
-
-# 825
-c = (char)(*(int *)__va_arg((*(int **)ap), (int)0));
-
-
+# 828
 default:
 
 
@@ -445,21 +407,156 @@ goto dostring;
 
 # 843
 case 'u':
-flag |= 0xC0;
+flag |= 0x40;
 break;
 
 
 }
 
-# 1277
-if((flag & (0xC0)) == 0x00)
+
+if(flag & (0x700)) {
+
+if(flag & 0x1000)
+
+prec = 6;
+fval = (*(double *)__va_arg((*(double **)ap), (double)0));
+if(fval < 0.0) {
+fval = -fval;
+flag |= 0x03;
+}
+eexp = 0;
+if( fval!=0) {
+(void)(*(&eexp) = (unsigned char)((*(unsigned long *)&fval >> 23) & 255) - 126);
+eexp--;
+eexp *= 3;
+eexp /= 10;
+if(eexp < 0)
+eexp--;
+
+
+
+tmpval.integ = scale(-eexp);
+tmpval.integ *= fval;
+if(tmpval.integ < 1.0)
+eexp--;
+else if(tmpval.integ >= 10.0)
+eexp++;
+}
+
+# 1138
+if(prec <= 12)
+fval += fround((unsigned int)prec);
+
+
+if((eexp > 9)||(fval != 0 && (unsigned long)fval == 0 && eexp > 1)) {
+
+
+
+if(tmpval.integ < 4.294967296){
+eexp -= (sizeof dpowers/sizeof dpowers[0])-1;
+}else{
+eexp -= (sizeof dpowers/sizeof dpowers[0])-2;
+}
+tmpval.integ = scale(eexp);
+val = ((sizeof(double)== 3) ? _tdiv_to_l_(fval,tmpval.integ) : _div_to_l_(fval,tmpval.integ));
+
+
+fval = 0.0;
+} else {
+val = (unsigned long)fval;
+fval -= (double)val;
+eexp = 0;
+}
+
+for(c = 1 ; c != (sizeof dpowers/sizeof dpowers[0]) ; c++)
+if(val < dpowers[c])
+break;
+
+
+
+width -= prec + c + eexp;
+if(
+
+# 1173
+prec)
+width--;
+if(flag & 0x03)
+width--;
+
+# 1201
+{
+
+# 1206
+while(width > 0) {
+((*sp++ = (' ')));
+width--;
+}
+
+
+
+
+if(flag & 0x03)
+
+((*sp++ = ('-')));
+
+# 1221
+}
+while(c--) {
+
+
+
+{
+tmpval.vd = val/dpowers[c];
+tmpval.vd %= 10;
+((*sp++ = ('0' + tmpval.vd)));
+}
+
+}
+while(eexp > 0) {
+((*sp++ = ('0')));
+eexp--;
+}
+if(prec > (int)((sizeof dpowers/sizeof dpowers[0])-2))
+c = (sizeof dpowers/sizeof dpowers[0])-2;
+else
+c = (char)prec;
+prec -= (int)c;
+
+
+
+if(c)
+
+((*sp++ = ('.')));
+
+# 1253
+val = (unsigned long)(fval * scale((signed char)c));
+while(c--) {
+tmpval.vd = val/dpowers[c];
+tmpval.vd %= 10;
+((*sp++ = ('0' + tmpval.vd)));
+val %= dpowers[c];
+}
+
+while(prec) {
+((*sp++ = ('0')));
+prec--;
+}
+
+# 1271
+continue;
+}
+
+
+
+
+if((flag & 0x40) == 0x00)
 
 {
 
 # 1285
-val = (unsigned int)(*(int *)__va_arg((*(int **)ap), (int)0));
+val = (unsigned long)(*(int *)__va_arg((*(int **)ap), (int)0));
 
-if((int)val < 0) {
+if((long)val < 0) {
 flag |= 0x03;
 val = -val;
 }
@@ -481,49 +578,12 @@ val = (*(unsigned *)__va_arg((*(unsigned **)ap), (unsigned)0));
 if(prec == 0 && val == 0)
 prec++;
 
-
-switch((unsigned char)(flag & (0xC0))) {
-
-
-
-
-case 0x00:
-
-
-case 0xC0:
-
-
+# 1331
 for(c = 1 ; c != sizeof dpowers/sizeof dpowers[0] ; c++)
 if(val < dpowers[c])
 break;
 
-break;
-
-
-
-
-case 0x80:
-
-for(c = 1 ; c != sizeof hexpowers/sizeof hexpowers[0] ; c++)
-if(val < hexpowers[c])
-break;
-
-break;
-
-# 1352
-case 0x40:
-
-for(c = 1 ; c != sizeof octpowers/sizeof octpowers[0] ; c++)
-if(val < octpowers[c])
-break;
-
-break;
-
-
-
-}
-
-
+# 1365
 if(c < prec)
 c = (char)prec;
 else if(prec < c)
@@ -540,75 +600,18 @@ else
 width = 0;
 }
 
-
-
-if((flag & (
-
-0x04|
-
-(0xC0)|0x800)) == (0x40|0x800)) {
-if(width)
-width--;
-} else
-
-
-
-if((flag & ((0xC0)|0x800)) == (0x80|0x800)) {
-
-# 1398
-if(width > 2)
-width -= 2;
-else
-width = 0;
-}
-
-
-
-
+# 1407
 if(width > c)
 width -= c;
 else
 width = 0;
 
-
-if(flag & 0x04) {
-
-
-
-
-if(flag & 0x03)
-((*sp++ = ('-')));
-
-
-else
-
-
-if(flag & 0x01)
-((*sp++ = (' ')));
-
-
-else if((flag & ((0xC0)|0x800)) == (0x80|0x800)) {
-((*sp++ = ('0')));
-
-((*sp++ = (flag & 0x20 ? 'X' : 'x')));
-
-# 1438
-}
-
-
-if(width)
-do
-((*sp++ = ('0')));
-while(--width);
-
-} else
-
+# 1448
 {
 
 if(width
 
-&& !(flag & 0x08)
-
+# 1454
 )
 do
 ((*sp++ = (' ')));
@@ -618,83 +621,24 @@ while(--width);
 if(flag & 0x03)
 ((*sp++ = ('-')));
 
-
-
-else if(flag & 0x01)
-((*sp++ = (' ')));
-
-
-
-if((flag & ((0xC0)|0x800)) == (0x40|0x800))
-((*sp++ = ('0')));
-else
-
-
-
-if((flag & ((0xC0)|0x800)) == (0x80|0x800)) {
-
-# 1484
-((*sp++ = ('0')));
-
-((*sp++ = (flag & 0x20 ? 'X' : 'x')));
-
-# 1492
-}
-
-
+# 1495
 }
 
 # 1500
 while(prec--) {
 
-switch((unsigned char)(flag & (0xC0)))
-
+# 1504
 {
 
+# 1515
+c = (val / dpowers[(unsigned int)prec]) % 10 + '0';
 
-
-
-case 0x00:
-
-
-case 0xC0:
-
-
-c = (val / dpowers[(unsigned char)prec]) % 10 + '0';
-
-break;
-
-# 1523
-case 0x80:
-
-{
-unsigned char idx = (val / hexpowers[(unsigned char)prec]) & 0xF;
-
-c = (flag & 0x20 ? "0123456789ABCDEF" : "0123456789abcdef")[idx];
-
-# 1534
-}
-
-break;
-
-# 1542
-case 0x40:
-
-c = ((val / octpowers[(unsigned char)prec]) & 07) + '0';
-
-break;
-
-
+# 1549
 }
 ((*sp++ = (c)));
 }
 
-
-if((flag & 0x08) && width > 0)
-do
-((*sp++ = (' ')));
-while(--width);
-
+# 1559
 }
 
 alldone:

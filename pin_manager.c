@@ -27,47 +27,49 @@ void PIN_MANAGER_Initialize(void)
     /**
     LATx registers
     */
+#ifdef _18F45K50
     LATE = 0x00;
     LATD = 0x00;
-    LATA = 0x00;
+#endif
+    LATA = 0x00;        // Initialize all outputs to Zero
     LATB = 0x00;
     LATC = 0x00;
 
     /**
     TRISx registers
     */
+#ifdef _18F45K50
     TRISE = 0x07;
-    TRISA = 0xD0;
-    TRISB = 0x00;
-    TRISC = 0x84;
     TRISD = 0xFF;
-    TRISCbits.RC0 = 0;
-    TRISCbits.RC6 =     0;
-    TRISCbits.RC7   = 0;
+#endif
+    TRISA = 0x00;
+    TRISB = 0x00;
+    TRISC = 0x04;
 
     /**
-    ANSELx registers
+     Analog v Digital configuration registers
     */
+    
+#ifdef _18F45K50
+
+    ANSELE = 0x07;
     ANSELD = 0xFF;
     ANSELC = 0x00;
     ANSELB = 0x00;
-    ANSELE = 0x07;
     ANSELA = 0x00;
+#endif
+    
+#ifdef _18F2455
+    ADCON1 = 0x00;      // Configure all ports as digital
+    ADCON2 = 0x00;
+#endif
 
-    /**
-    WPUx registers
-    */
-    WPUB = 0x00;
-    INTCON2bits.nRBPU = 1;
-    PIN_MANAGER_IOC();
-}
-  
-void PIN_MANAGER_IOC(void)
-{   
-	// Clear global Interrupt-On-Change flag
-    INTCONbits.IOCIF = 0;
+#ifdef _18F45K50
+    WPUB = 0x00;        // Weak Pull-Ups on port B
+    INTCONbits.IOCIF = 0; // Interrupt-On-Change
+#endif
+    
+    INTCON2bits.nRBPU = 1;  // 1 = disable Reg B Pull-ups
 }
 
-/**
- End of File
-*/
+/** -----------------  End of File ---------------------*/

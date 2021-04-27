@@ -1,8 +1,8 @@
 /*
- * File:   CCP2 PWM - 40Khz Generator
+ * File:   CCP2.c   - 40Khz Generator
  * Author: MBender
  *
- * THis is the PWM for the 40Khz clock. 
+ * THis is the PWM timer for the 40Khz clock. 
  * Timer2 is the source. It takes 50 pulses for a full cycle.
  * The PWM module counts half (-1) and switches generating a 40Khz
  * square wave with a 50% duty cycle. 
@@ -21,11 +21,9 @@
 
 void CCP2_Init (void)
 {
-    // Set the PWM2 to the options selected in the User Interface
-	
-	// CCP2M PWM; DC2B 3; 
-	CCP2CON = 0x0C;     
+	// CCP2M PWM; DC2B 3;
+	CCP2CON = 0x0C;         // Same or 45K50 and 2455   
 	CCPR2L = CCP2PWM_Ticks>>2;   // 24 = 25 pulses - 1 = (Pulses/Cycle / 2) - 1
-    CCP2CONbits.DC2B = CCP2PWM_Ticks && 0x03;
+    CCP2CONbits.DC2B = CCP2PWM_Ticks & 0x03;
 	CCPR2H = 0x00;   // 0
 }
