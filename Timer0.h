@@ -12,7 +12,7 @@
 
 #include <xc.h> // include processor files - each processor file is guarded.  
 
-uint16_t Timer0_Reload = ~(I_Clock / 1000 * 5 + 1);  
+uint16_t Timer0_Reload = ~(I_Clock / 1000 * 5 + 2);  
 
 #endif	/* Timer0_H */
 

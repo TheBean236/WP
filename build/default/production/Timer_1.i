@@ -5025,7 +5025,7 @@ typedef uint16_t uintptr_t;
 # 15 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\stdbool.h"
 typedef unsigned char bool;
 
-# 32 "Master.h"
+# 53 "Master.h"
 typedef union EchoPeriod_tag
 {
 struct
@@ -5040,13 +5040,32 @@ uint16_t EP16;
 } EchoPeriod_t;
 volatile EchoPeriod_t giEchoCounter;
 
-# 75
+# 156
 volatile char gsCurrDate[] = "01/04/21";
 volatile char gsCurrTime[] = "01:00:00";
 volatile char gsTotalSecs[] = "---";
 
+
 volatile bool gb_UpdateTime = 0;
 volatile bool gb_EchoDetected = 0;
+volatile bool gb_Temp_Captured = 0;
+volatile bool gb_Temp_Done = 0;
+
+
+volatile bool gb_TempCaptured = 0;
+volatile uint16_t giTempCapture;
+volatile float gfAirTempC;
+volatile int giAirTempC;
+volatile int giAirTempF;
+
+
+volatile uint16_t giGals;
+volatile uint16_t giPercentFull;
+volatile uint16_t giEmptySpace_mm;
+
+
+uint8_t sLine1[100];
+uint8_t sLine2[100];
 
 
 
@@ -5059,7 +5078,7 @@ uint8_t giDay = 1;
 uint8_t giMonth = 4;
 uint8_t giYear = 21;
 
-# 99
+# 199
 uint16_t giBacklight_Timer = 0;
 
 # 10 "Timer_1.c"

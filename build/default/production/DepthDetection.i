@@ -1,17 +1,45 @@
 
-# 1 "Timer_1.c"
+# 1 "DepthDetection.c"
 
-# 18 "C:/Program Files/Microchip/MPLABX/v5.45/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\xc.h"
+# 30 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\math.h"
+extern double fabs(double);
+extern double floor(double);
+extern double ceil(double);
+extern double modf(double, double *);
+extern double sqrt(double);
+extern double atof(const char *);
+extern double sin(double) ;
+extern double cos(double) ;
+extern double tan(double) ;
+extern double asin(double) ;
+extern double acos(double) ;
+extern double atan(double);
+extern double atan2(double, double) ;
+extern double log(double);
+extern double log10(double);
+extern double pow(double, double) ;
+extern double exp(double) ;
+extern double sinh(double) ;
+extern double cosh(double) ;
+extern double tanh(double);
+extern double eval_poly(double, const double *, int);
+extern double frexp(double, int *);
+extern double ldexp(double, int);
+extern double fmod(double, double);
+extern double trunc(double);
+extern double round(double);
+
+# 18 "C:/Program Files (x86)/Microchip/MPLABX/v5.40/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\xc.h"
 extern const char __xc8_OPTIM_SPEED;
 
 extern double __fpnormalize(double);
 
 
-# 13 "C:\Program Files\Microchip\xc8\v2.32\pic\include\c90\xc8debug.h"
+# 13 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\xc8debug.h"
 #pragma intrinsic(__builtin_software_breakpoint)
 extern void __builtin_software_breakpoint(void);
 
-# 52 "C:/Program Files/Microchip/MPLABX/v5.45/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\proc\pic18f2455.h"
+# 52 "C:/Program Files (x86)/Microchip/MPLABX/v5.40/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\proc\pic18f2455.h"
 extern volatile unsigned short UFRM __at(0xF66);
 
 asm("UFRM equ 0F66h");
@@ -4909,7 +4937,7 @@ extern volatile __bit nW __at(0x7E3A);
 
 extern volatile __bit nWRITE __at(0x7E3A);
 
-# 18 "C:/Program Files/Microchip/MPLABX/v5.45/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\pic18.h"
+# 18 "C:/Program Files (x86)/Microchip/MPLABX/v5.40/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\pic18.h"
 __attribute__((__unsupported__("The " "flash_write" " routine is no longer supported. Please use the MPLAB X MCC."))) void flash_write(const unsigned char *, unsigned int, __far unsigned char *);
 __attribute__((__unsupported__("The " "EraseFlash" " routine is no longer supported. Please use the MPLAB X MCC."))) void EraseFlash(unsigned long startaddr, unsigned long endaddr);
 
@@ -4936,7 +4964,7 @@ extern __nonreentrant void _delaywdt(unsigned long);
 #pragma intrinsic(_delay3)
 extern __nonreentrant void _delay3(unsigned char);
 
-# 13 "C:\Program Files\Microchip\xc8\v2.32\pic\include\c90\stdint.h"
+# 13 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\stdint.h"
 typedef signed char int8_t;
 
 # 20
@@ -5022,10 +5050,10 @@ typedef int16_t intptr_t;
 
 typedef uint16_t uintptr_t;
 
-# 15 "C:\Program Files\Microchip\xc8\v2.32\pic\include\c90\stdbool.h"
+# 15 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\stdbool.h"
 typedef unsigned char bool;
 
-# 32 "Master.h"
+# 53 "Master.h"
 typedef union EchoPeriod_tag
 {
 struct
@@ -5040,13 +5068,32 @@ uint16_t EP16;
 } EchoPeriod_t;
 volatile EchoPeriod_t giEchoCounter;
 
-# 75
+# 156
 volatile char gsCurrDate[] = "01/04/21";
 volatile char gsCurrTime[] = "01:00:00";
 volatile char gsTotalSecs[] = "---";
 
+
 volatile bool gb_UpdateTime = 0;
 volatile bool gb_EchoDetected = 0;
+volatile bool gb_Temp_Captured = 0;
+volatile bool gb_Temp_Done = 0;
+
+
+volatile bool gb_TempCaptured = 0;
+volatile uint16_t giTempCapture;
+volatile float gfAirTempC;
+volatile int giAirTempC;
+volatile int giAirTempF;
+
+
+volatile uint16_t giGals;
+volatile uint16_t giPercentFull;
+volatile uint16_t giEmptySpace_mm;
+
+
+uint8_t sLine1[100];
+uint8_t sLine2[100];
 
 
 
@@ -5059,32 +5106,129 @@ uint8_t giDay = 1;
 uint8_t giMonth = 4;
 uint8_t giYear = 21;
 
-# 99
+# 199
 uint16_t giBacklight_Timer = 0;
 
-# 10 "Timer_1.c"
-void Timer1_Init()
+# 14 "CommonRoutines.h"
+void Timer0_Init(void);
+void Timer0_ISR(void);
+void Timer0_Reset(void);
+
+
+
+
+void Timer1_Init(void);
+void Timer1_ISR(void);
+void Timer1_Reset(void);
+
+
+
+void Timer2_Init(void);
+void Timer2_ISR(void);
+void StartDepthDetection (void);
+void EndDepthDetection (void);
+
+
+
+void Timer3_Init(void);
+void Timer3_ISR (void);
+
+
+
+void CCP1_Init (void);
+void CCP1_ISR (void);
+void CCP1_Activate (void);
+
+
+void CCP2_Init (void);
+void CCP2_ISR (void);
+
+
+
+void AN0_Init (void);
+void AN0_ISR (void);
+void CaptureTemp (void);
+void ComputeTemp (void);
+
+void ComputeWaterVol (void);
+
+
+void LCD_Init (void);
+void LCD_DisplayResults (void);
+void LCD_WriteChar (uint8_t iChar);
+void LCD_WriteCmd (uint8_t iCmd, uint16_t iDelay);
+void LCD_WriteString (uint8_t *iData);
+void LCD_WriteLine (uint8_t *iData);
+void LCD_ClearScreen (void);
+void LCD_GoTo (uint8_t iLine, uint8_t iPos);
+void LCD_Busy (void);
+
+# 13 "DepthDetection.c"
+double gd_TankSurfArea_mm2;
+double gd_SensorHeight_mm;
+double gd_TankGalsPer_mm;
+double gd_MaxWaterHeight_mm;
+double gd_Default_SOS;
+
+void StartDepthDetection(void)
 {
-PIR1bits.TMR1IF = 0;
-PIE1bits.TMR1IE = 0;
 
-# 20
-T1CON = 0x80;
 
-TMR1H = 0;
-TMR1L = 0;
+
+
+TMR2 = 0;
+PIR1bits.TMR2IF = 0;
+PIE1bits.TMR2IE = 1;
+T2CONbits.TMR2ON = 1;
+CCP1_Activate();
+LATAbits.LATA5 = 0;
+T1CONbits.TMR1ON = 1;
 }
 
-void Timer1_Reset()
+void ComputeWaterVol()
 {
-T1CONbits.TMR1ON = 0;
-TMR1H = 0;
-TMR1L = 0;
+float dCurrTemp;
+float d_mmPerTick;
+float dEmptySpace_mm;
+float dWaterHeight_mm;
+float dWaterVol;
+float dEchoPeriod;
+float dSOS;
+
+dEchoPeriod = giEchoCounter.EP16 * 500.0e-9;
+dCurrTemp = gfAirTempC;
+dSOS = 331.3e3 * sqrt( 1 + (dCurrTemp / 273.15));
+d_mmPerTick = dSOS * 500.0e-9 / 2;
+
+
+
+if (0 == 0)
+dEmptySpace_mm = (giEchoCounter.EP16 - 4400) * d_mmPerTick;
+else
+dEmptySpace_mm = giEchoCounter.EP16 * d_mmPerTick;
+giEmptySpace_mm = dEmptySpace_mm;
+dWaterHeight_mm = gd_SensorHeight_mm - dEmptySpace_mm;
+dWaterVol = dWaterHeight_mm * gd_TankGalsPer_mm;
+giPercentFull = dWaterHeight_mm * 100 / gd_MaxWaterHeight_mm;
+giGals = round(dWaterVol);
+
+
+
+
+if (LATCbits.LATC0 == 1) {
+if (giPercentFull < 25) LATCbits.LATC0 = 0;
+} else {
+if (giPercentFull > 80) LATCbits.LATC0 = 1;
 }
 
-void Timer1_ISR()
+if (1) LCD_DisplayResults();
+}
+
+void InitTankVariables (void)
 {
-
-
-__nop();
+gd_TankSurfArea_mm2 = 3.1416926f * pow(48 * 25.4 / 2, 2);
+gd_SensorHeight_mm = 72 * 25.4;
+gd_TankGalsPer_mm = gd_TankSurfArea_mm2 * 264.172052e-9;
+gd_MaxWaterHeight_mm = 68 * 25.4;
+gd_Default_SOS = 331.3e3 * sqrt( 1 + (20.0 / 273.15));
 }

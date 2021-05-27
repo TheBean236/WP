@@ -9,6 +9,7 @@
  */
 
 #include <xc.h>
+#include <pic18f2455.h>
 #include "Master.h"
 #include "CommonRoutines.h"
 
@@ -33,6 +34,10 @@ void __interrupt() INTERRUPT_InterruptManager (void)
         {
             Timer2_ISR();   // 40Khz Interrupt
         } 
+        else if (PIE1bits.ADIE == 1 && PIR1bits.ADIF == 1)
+        {
+            AN0_ISR();      // Thermistor A/D Conversion complete
+        }
         else
         {
             //Unhandled Interrupt

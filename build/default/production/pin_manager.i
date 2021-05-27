@@ -4942,25 +4942,181 @@ void PIN_MANAGER_Initialize (void);
 # 304
 void PIN_MANAGER_IOC(void);
 
-# 25 "pin_manager.c"
+# 13 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\stdint.h"
+typedef signed char int8_t;
+
+# 20
+typedef signed int int16_t;
+
+# 28
+typedef __int24 int24_t;
+
+# 36
+typedef signed long int int32_t;
+
+# 52
+typedef unsigned char uint8_t;
+
+# 58
+typedef unsigned int uint16_t;
+
+# 65
+typedef __uint24 uint24_t;
+
+# 72
+typedef unsigned long int uint32_t;
+
+# 88
+typedef signed char int_least8_t;
+
+# 96
+typedef signed int int_least16_t;
+
+# 109
+typedef __int24 int_least24_t;
+
+# 118
+typedef signed long int int_least32_t;
+
+# 136
+typedef unsigned char uint_least8_t;
+
+# 143
+typedef unsigned int uint_least16_t;
+
+# 154
+typedef __uint24 uint_least24_t;
+
+# 162
+typedef unsigned long int uint_least32_t;
+
+# 181
+typedef signed char int_fast8_t;
+
+# 188
+typedef signed int int_fast16_t;
+
+# 200
+typedef __int24 int_fast24_t;
+
+# 208
+typedef signed long int int_fast32_t;
+
+# 224
+typedef unsigned char uint_fast8_t;
+
+# 230
+typedef unsigned int uint_fast16_t;
+
+# 240
+typedef __uint24 uint_fast24_t;
+
+# 247
+typedef unsigned long int uint_fast32_t;
+
+# 268
+typedef int32_t intmax_t;
+
+# 282
+typedef uint32_t uintmax_t;
+
+# 289
+typedef int16_t intptr_t;
+
+
+
+
+typedef uint16_t uintptr_t;
+
+# 15 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\stdbool.h"
+typedef unsigned char bool;
+
+# 53 "Master.h"
+typedef union EchoPeriod_tag
+{
+struct
+{
+uint8_t EPl;
+uint8_t EPh;
+};
+struct
+{
+uint16_t EP16;
+};
+} EchoPeriod_t;
+volatile EchoPeriod_t giEchoCounter;
+
+# 156
+volatile char gsCurrDate[] = "01/04/21";
+volatile char gsCurrTime[] = "01:00:00";
+volatile char gsTotalSecs[] = "---";
+
+
+volatile bool gb_UpdateTime = 0;
+volatile bool gb_EchoDetected = 0;
+volatile bool gb_Temp_Captured = 0;
+volatile bool gb_Temp_Done = 0;
+
+
+volatile bool gb_TempCaptured = 0;
+volatile uint16_t giTempCapture;
+volatile float gfAirTempC;
+volatile int giAirTempC;
+volatile int giAirTempF;
+
+
+volatile uint16_t giGals;
+volatile uint16_t giPercentFull;
+volatile uint16_t giEmptySpace_mm;
+
+
+uint8_t sLine1[100];
+uint8_t sLine2[100];
+
+
+
+uint8_t giMonthEndTbl[] = {31,28,31,30,31,30,31,31,30,31,30,31};
+uint16_t giTotalSecs = 0;
+uint8_t giSecs = 0;
+uint8_t giMins = 0;
+uint8_t giHours = 0;
+uint8_t giDay = 1;
+uint8_t giMonth = 4;
+uint8_t giYear = 21;
+
+# 199
+uint16_t giBacklight_Timer = 0;
+
+# 26 "pin_manager.c"
 void PIN_MANAGER_Initialize(void)
 {
 
-# 34
+# 35
 LATA = 0x00;
 LATB = 0x00;
 LATC = 0x00;
 
-# 45
-TRISA = 0x00;
-TRISB = 0x00;
-TRISC = 0x04;
+# 47
+TRISA = 0xff;
+TRISB = 0xff;
+TRISC = 0xff;
 
-# 63
-ADCON1 = 0x00;
-ADCON2 = 0x00;
 
-# 72
+TRISB = 0;
+TRISAbits.RA1 = 0;
+TRISAbits.RA3 = 0;
+TRISAbits.RA2 = 0;
+TRISAbits.RA4 = 0;
+TRISAbits.TRISA5 = 0;
+TRISCbits.RC0 = 0;
+TRISCbits.RC1 = 0;
+TRISCbits.RC6 = 0;
+TRISCbits.RC7 = 0;
+
+# 81
+ADCON1 = 0x0e;
+
+# 89
 INTCON2bits.nRBPU = 1;
 }
 

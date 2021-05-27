@@ -1,17 +1,140 @@
 
-# 1 "SysInit.c"
+# 1 "TempCalc.c"
 
-# 18 "C:/Program Files/Microchip/MPLABX/v5.45/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\xc.h"
+# 30 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\math.h"
+extern double fabs(double);
+extern double floor(double);
+extern double ceil(double);
+extern double modf(double, double *);
+extern double sqrt(double);
+extern double atof(const char *);
+extern double sin(double) ;
+extern double cos(double) ;
+extern double tan(double) ;
+extern double asin(double) ;
+extern double acos(double) ;
+extern double atan(double);
+extern double atan2(double, double) ;
+extern double log(double);
+extern double log10(double);
+extern double pow(double, double) ;
+extern double exp(double) ;
+extern double sinh(double) ;
+extern double cosh(double) ;
+extern double tanh(double);
+extern double eval_poly(double, const double *, int);
+extern double frexp(double, int *);
+extern double ldexp(double, int);
+extern double fmod(double, double);
+extern double trunc(double);
+extern double round(double);
+
+# 4 "C:/Program Files (x86)/Microchip/MPLABX/v5.40/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\__size_t.h"
+typedef unsigned size_t;
+
+# 7 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\stdarg.h"
+typedef void * va_list[1];
+
+#pragma intrinsic(__va_start)
+extern void * __va_start(void);
+
+#pragma intrinsic(__va_arg)
+extern void * __va_arg(void *, ...);
+
+# 43 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\stdio.h"
+struct __prbuf
+{
+char * ptr;
+void (* func)(char);
+};
+
+# 29 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\errno.h"
+extern int errno;
+
+# 12 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\conio.h"
+extern void init_uart(void);
+
+extern char getch(void);
+extern char getche(void);
+extern void putch(char);
+extern void ungetch(char);
+
+extern __bit kbhit(void);
+
+# 23
+extern char * cgets(char *);
+extern void cputs(const char *);
+
+# 88 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\stdio.h"
+extern int cprintf(char *, ...);
+#pragma printf_check(cprintf)
+
+
+
+extern int _doprnt(struct __prbuf *, const register char *, register va_list);
+
+
+# 180
+#pragma printf_check(vprintf) const
+#pragma printf_check(vsprintf) const
+
+extern char * gets(char *);
+extern int puts(const char *);
+extern int scanf(const char *, ...) __attribute__((unsupported("scanf() is not supported by this compiler")));
+extern int sscanf(const char *, const char *, ...) __attribute__((unsupported("sscanf() is not supported by this compiler")));
+extern int vprintf(const char *, va_list) __attribute__((unsupported("vprintf() is not supported by this compiler")));
+extern int vsprintf(char *, const char *, va_list) __attribute__((unsupported("vsprintf() is not supported by this compiler")));
+extern int vscanf(const char *, va_list ap) __attribute__((unsupported("vscanf() is not supported by this compiler")));
+extern int vsscanf(const char *, const char *, va_list) __attribute__((unsupported("vsscanf() is not supported by this compiler")));
+
+#pragma printf_check(printf) const
+#pragma printf_check(sprintf) const
+extern int sprintf(char *, const char *, ...);
+extern int printf(const char *, ...);
+
+# 14 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\string.h"
+extern void * memcpy(void *, const void *, size_t);
+extern void * memmove(void *, const void *, size_t);
+extern void * memset(void *, int, size_t);
+
+# 36
+extern char * strcat(char *, const char *);
+extern char * strcpy(char *, const char *);
+extern char * strncat(char *, const char *, size_t);
+extern char * strncpy(char *, const char *, size_t);
+extern char * strdup(const char *);
+extern char * strtok(char *, const char *);
+
+
+extern int memcmp(const void *, const void *, size_t);
+extern int strcmp(const char *, const char *);
+extern int stricmp(const char *, const char *);
+extern int strncmp(const char *, const char *, size_t);
+extern int strnicmp(const char *, const char *, size_t);
+extern void * memchr(const void *, int, size_t);
+extern size_t strcspn(const char *, const char *);
+extern char * strpbrk(const char *, const char *);
+extern size_t strspn(const char *, const char *);
+extern char * strstr(const char *, const char *);
+extern char * stristr(const char *, const char *);
+extern char * strerror(int);
+extern size_t strlen(const char *);
+extern char * strchr(const char *, int);
+extern char * strichr(const char *, int);
+extern char * strrchr(const char *, int);
+extern char * strrichr(const char *, int);
+
+# 18 "C:/Program Files (x86)/Microchip/MPLABX/v5.40/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\xc.h"
 extern const char __xc8_OPTIM_SPEED;
 
 extern double __fpnormalize(double);
 
 
-# 13 "C:\Program Files\Microchip\xc8\v2.32\pic\include\c90\xc8debug.h"
+# 13 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\xc8debug.h"
 #pragma intrinsic(__builtin_software_breakpoint)
 extern void __builtin_software_breakpoint(void);
 
-# 52 "C:/Program Files/Microchip/MPLABX/v5.45/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\proc\pic18f2455.h"
+# 52 "C:/Program Files (x86)/Microchip/MPLABX/v5.40/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\proc\pic18f2455.h"
 extern volatile unsigned short UFRM __at(0xF66);
 
 asm("UFRM equ 0F66h");
@@ -4909,7 +5032,7 @@ extern volatile __bit nW __at(0x7E3A);
 
 extern volatile __bit nWRITE __at(0x7E3A);
 
-# 18 "C:/Program Files/Microchip/MPLABX/v5.45/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\pic18.h"
+# 18 "C:/Program Files (x86)/Microchip/MPLABX/v5.40/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\pic18.h"
 __attribute__((__unsupported__("The " "flash_write" " routine is no longer supported. Please use the MPLAB X MCC."))) void flash_write(const unsigned char *, unsigned int, __far unsigned char *);
 __attribute__((__unsupported__("The " "EraseFlash" " routine is no longer supported. Please use the MPLAB X MCC."))) void EraseFlash(unsigned long startaddr, unsigned long endaddr);
 
@@ -4936,24 +5059,189 @@ extern __nonreentrant void _delaywdt(unsigned long);
 #pragma intrinsic(_delay3)
 extern __nonreentrant void _delay3(unsigned char);
 
-# 7 "SysInit.c"
-void OscInit(void);
-void PIN_MANAGER_Initialize(void);
+# 13 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\stdint.h"
+typedef signed char int8_t;
 
-void SysInit (void)
+# 20
+typedef signed int int16_t;
+
+# 28
+typedef __int24 int24_t;
+
+# 36
+typedef signed long int int32_t;
+
+# 52
+typedef unsigned char uint8_t;
+
+# 58
+typedef unsigned int uint16_t;
+
+# 65
+typedef __uint24 uint24_t;
+
+# 72
+typedef unsigned long int uint32_t;
+
+# 88
+typedef signed char int_least8_t;
+
+# 96
+typedef signed int int_least16_t;
+
+# 109
+typedef __int24 int_least24_t;
+
+# 118
+typedef signed long int int_least32_t;
+
+# 136
+typedef unsigned char uint_least8_t;
+
+# 143
+typedef unsigned int uint_least16_t;
+
+# 154
+typedef __uint24 uint_least24_t;
+
+# 162
+typedef unsigned long int uint_least32_t;
+
+# 181
+typedef signed char int_fast8_t;
+
+# 188
+typedef signed int int_fast16_t;
+
+# 200
+typedef __int24 int_fast24_t;
+
+# 208
+typedef signed long int int_fast32_t;
+
+# 224
+typedef unsigned char uint_fast8_t;
+
+# 230
+typedef unsigned int uint_fast16_t;
+
+# 240
+typedef __uint24 uint_fast24_t;
+
+# 247
+typedef unsigned long int uint_fast32_t;
+
+# 268
+typedef int32_t intmax_t;
+
+# 282
+typedef uint32_t uintmax_t;
+
+# 289
+typedef int16_t intptr_t;
+
+
+
+
+typedef uint16_t uintptr_t;
+
+# 15 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\stdbool.h"
+typedef unsigned char bool;
+
+# 53 "Master.h"
+typedef union EchoPeriod_tag
 {
-PIN_MANAGER_Initialize();
-OscInit();
+struct
+{
+uint8_t EPl;
+uint8_t EPh;
+};
+struct
+{
+uint16_t EP16;
+};
+} EchoPeriod_t;
+volatile EchoPeriod_t giEchoCounter;
+
+# 156
+volatile char gsCurrDate[] = "01/04/21";
+volatile char gsCurrTime[] = "01:00:00";
+volatile char gsTotalSecs[] = "---";
+
+
+volatile bool gb_UpdateTime = 0;
+volatile bool gb_EchoDetected = 0;
+volatile bool gb_Temp_Captured = 0;
+volatile bool gb_Temp_Done = 0;
+
+
+volatile bool gb_TempCaptured = 0;
+volatile uint16_t giTempCapture;
+volatile float gfAirTempC;
+volatile int giAirTempC;
+volatile int giAirTempF;
+
+
+volatile uint16_t giGals;
+volatile uint16_t giPercentFull;
+volatile uint16_t giEmptySpace_mm;
+
+
+uint8_t sLine1[100];
+uint8_t sLine2[100];
+
+
+
+uint8_t giMonthEndTbl[] = {31,28,31,30,31,30,31,31,30,31,30,31};
+uint16_t giTotalSecs = 0;
+uint8_t giSecs = 0;
+uint8_t giMins = 0;
+uint8_t giHours = 0;
+uint8_t giDay = 1;
+uint8_t giMonth = 4;
+uint8_t giYear = 21;
+
+# 199
+uint16_t giBacklight_Timer = 0;
+
+# 27 "TempCalc.c"
+float gfVtherm;
+float gfRtherm;
+float gfRRatio;
+float gfLnRRatio;
+
+void AN0_Init()
+{
+ADCON0 = 0x01;
+ADCON2 = 0xA8;
+PIR1bits.ADIF = 0;
+PIE1bits.ADIE = 1;
 }
 
-void OscInit(void)
+void AN0_ISR()
+{
+giTempCapture = (uint8_t) (ADRESH << 8);
+giTempCapture += ADRESL;
+PIR1bits.ADIF = 0;
+gb_TempCaptured = 1;
+}
+
+void CaptureTemp()
 {
 
 
-
-OSCCON = 0x10;
-
-# 31
-OSCTUNE = 0x00;
+gb_TempCaptured = 0;
+ADCON0bits.GO = 1;
 }
 
+void ComputeTemp()
+{
+gfVtherm = (5.075 * giTempCapture)/1023;
+gfRtherm = gfVtherm * 4700 / (5.075 - gfVtherm);
+gfRRatio = gfRtherm / 0.01763227;
+gfLnRRatio = log(gfRRatio);
+gfAirTempC = 3950.0 / gfLnRRatio - 273.15;
+giAirTempC = (int) round(gfAirTempC);
+giAirTempF = (int) round((gfAirTempC * 9 / 5) + 32);
+__nop();
+}

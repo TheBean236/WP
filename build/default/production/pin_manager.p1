@@ -1,4 +1,13 @@
 Version 3.2 HI-TECH Software Intermediate Code
+"56 Master.h
+[s S323 `uc 1 `uc 1 ]
+[n S323 . EPl EPh ]
+"61
+[s S324 `ui 1 ]
+[n S324 . EP16 ]
+"53
+[u S322 `S323 1 `S324 1 ]
+[n S322 EchoPeriod_tag . . ]
 "2547 C:/Program Files (x86)/Microchip/MPLABX/v5.40/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\proc\pic18f2455.h
 [v _LATA `Vuc ~T0 @X0 0 e@3977 ]
 "2647
@@ -11,10 +20,30 @@ Version 3.2 HI-TECH Software Intermediate Code
 [v _TRISB `Vuc ~T0 @X0 0 e@3987 ]
 "3257
 [v _TRISC `Vuc ~T0 @X0 0 e@3988 ]
+"2848
+[s S114 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S114 . TRISA0 TRISA1 TRISA2 TRISA3 TRISA4 TRISA5 TRISA6 ]
+"2857
+[s S115 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S115 . RA0 RA1 RA2 RA3 RA4 RA5 RA6 ]
+"2847
+[u S113 `S114 1 `S115 1 ]
+[n S113 . . . ]
+"2867
+[v _TRISAbits `VS113 ~T0 @X0 0 e@3986 ]
+"3268
+[s S126 :1 `uc 1 :1 `uc 1 :1 `uc 1 :3 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S126 . TRISC0 TRISC1 TRISC2 . TRISC6 TRISC7 ]
+"3276
+[s S127 :1 `uc 1 :1 `uc 1 :1 `uc 1 :3 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S127 . RC0 RC1 RC2 . RC6 RC7 ]
+"3267
+[u S125 `S126 1 `S127 1 ]
+[n S125 . . . ]
+"3285
+[v _TRISCbits `VS125 ~T0 @X0 0 e@3988 ]
 "5400
 [v _ADCON1 `Vuc ~T0 @X0 0 e@4033 ]
-"5329
-[v _ADCON2 `Vuc ~T0 @X0 0 e@4032 ]
 "7330
 [s S311 :7 `uc 1 :1 `uc 1 ]
 [n S311 . . NOT_RBPU ]
@@ -3136,42 +3165,280 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;xc8\pic\include\pic18.h: 207: extern __nonreentrant void _delay3(unsigned char);
 [; ;pin_manager.h: 292: void PIN_MANAGER_Initialize (void);
 [; ;pin_manager.h: 304: void PIN_MANAGER_IOC(void);
-"25 pin_manager.c
+[; ;stdint.h: 13: typedef signed char int8_t;
+[; ;stdint.h: 20: typedef signed int int16_t;
+[; ;stdint.h: 28: typedef __int24 int24_t;
+[; ;stdint.h: 36: typedef signed long int int32_t;
+[; ;stdint.h: 52: typedef unsigned char uint8_t;
+[; ;stdint.h: 58: typedef unsigned int uint16_t;
+[; ;stdint.h: 65: typedef __uint24 uint24_t;
+[; ;stdint.h: 72: typedef unsigned long int uint32_t;
+[; ;stdint.h: 88: typedef signed char int_least8_t;
+[; ;stdint.h: 96: typedef signed int int_least16_t;
+[; ;stdint.h: 109: typedef __int24 int_least24_t;
+[; ;stdint.h: 118: typedef signed long int int_least32_t;
+[; ;stdint.h: 136: typedef unsigned char uint_least8_t;
+[; ;stdint.h: 143: typedef unsigned int uint_least16_t;
+[; ;stdint.h: 154: typedef __uint24 uint_least24_t;
+[; ;stdint.h: 162: typedef unsigned long int uint_least32_t;
+[; ;stdint.h: 181: typedef signed char int_fast8_t;
+[; ;stdint.h: 188: typedef signed int int_fast16_t;
+[; ;stdint.h: 200: typedef __int24 int_fast24_t;
+[; ;stdint.h: 208: typedef signed long int int_fast32_t;
+[; ;stdint.h: 224: typedef unsigned char uint_fast8_t;
+[; ;stdint.h: 230: typedef unsigned int uint_fast16_t;
+[; ;stdint.h: 240: typedef __uint24 uint_fast24_t;
+[; ;stdint.h: 247: typedef unsigned long int uint_fast32_t;
+[; ;stdint.h: 268: typedef int32_t intmax_t;
+[; ;stdint.h: 282: typedef uint32_t uintmax_t;
+[; ;stdint.h: 289: typedef int16_t intptr_t;
+[; ;stdint.h: 294: typedef uint16_t uintptr_t;
+[; ;stdbool.h: 15: typedef unsigned char bool;
+[; ;Master.h: 53: typedef union EchoPeriod_tag
+[; ;Master.h: 54: {
+[; ;Master.h: 55: struct
+[; ;Master.h: 56: {
+[; ;Master.h: 57: uint8_t EPl;
+[; ;Master.h: 58: uint8_t EPh;
+[; ;Master.h: 59: };
+[; ;Master.h: 60: struct
+[; ;Master.h: 61: {
+[; ;Master.h: 62: uint16_t EP16;
+[; ;Master.h: 63: };
+[; ;Master.h: 64: } EchoPeriod_t;
+"65 Master.h
+[v _giEchoCounter `VS322 ~T0 @X0 1 e ]
+[; ;Master.h: 65: volatile EchoPeriod_t giEchoCounter;
+"156
+[v _gsCurrDate `Vuc ~T0 @X0 -> 0 `x e ]
+[i _gsCurrDate
+:U ..
+-> 48 `c
+-> 49 `c
+-> 47 `c
+-> 48 `c
+-> 52 `c
+-> 47 `c
+-> 50 `c
+-> 49 `c
+-> 0 `c
+..
+]
+[; ;Master.h: 156: volatile char gsCurrDate[] = "01/04/21";
+"157
+[v _gsCurrTime `Vuc ~T0 @X0 -> 0 `x e ]
+[i _gsCurrTime
+:U ..
+-> 48 `c
+-> 49 `c
+-> 58 `c
+-> 48 `c
+-> 48 `c
+-> 58 `c
+-> 48 `c
+-> 48 `c
+-> 0 `c
+..
+]
+[; ;Master.h: 157: volatile char gsCurrTime[] = "01:00:00";
+"158
+[v _gsTotalSecs `Vuc ~T0 @X0 -> 0 `x e ]
+[i _gsTotalSecs
+:U ..
+-> 45 `c
+-> 45 `c
+-> 45 `c
+-> 0 `c
+..
+]
+[; ;Master.h: 158: volatile char gsTotalSecs[] = "---";
+"161
+[v _gb_UpdateTime `Vuc ~T0 @X0 1 e ]
+[i _gb_UpdateTime
+-> -> 0 `i `uc
+]
+[; ;Master.h: 161: volatile bool gb_UpdateTime = 0;
+"162
+[v _gb_EchoDetected `Vuc ~T0 @X0 1 e ]
+[i _gb_EchoDetected
+-> -> 0 `i `uc
+]
+[; ;Master.h: 162: volatile bool gb_EchoDetected = 0;
+"163
+[v _gb_Temp_Captured `Vuc ~T0 @X0 1 e ]
+[i _gb_Temp_Captured
+-> -> 0 `i `uc
+]
+[; ;Master.h: 163: volatile bool gb_Temp_Captured = 0;
+"164
+[v _gb_Temp_Done `Vuc ~T0 @X0 1 e ]
+[i _gb_Temp_Done
+-> -> 0 `i `uc
+]
+[; ;Master.h: 164: volatile bool gb_Temp_Done = 0;
+"167
+[v _gb_TempCaptured `Vuc ~T0 @X0 1 e ]
+[i _gb_TempCaptured
+-> -> 0 `i `uc
+]
+[; ;Master.h: 167: volatile bool gb_TempCaptured = 0;
+"168
+[v _giTempCapture `Vui ~T0 @X0 1 e ]
+[; ;Master.h: 168: volatile uint16_t giTempCapture;
+"169
+[v _gfAirTempC `Vf ~T0 @X0 1 e ]
+[; ;Master.h: 169: volatile float gfAirTempC;
+"170
+[v _giAirTempC `Vi ~T0 @X0 1 e ]
+[; ;Master.h: 170: volatile int giAirTempC;
+"171
+[v _giAirTempF `Vi ~T0 @X0 1 e ]
+[; ;Master.h: 171: volatile int giAirTempF;
+"174
+[v _giGals `Vui ~T0 @X0 1 e ]
+[; ;Master.h: 174: volatile uint16_t giGals;
+"175
+[v _giPercentFull `Vui ~T0 @X0 1 e ]
+[; ;Master.h: 175: volatile uint16_t giPercentFull;
+"176
+[v _giEmptySpace_mm `Vui ~T0 @X0 1 e ]
+[; ;Master.h: 176: volatile uint16_t giEmptySpace_mm;
+"179
+[v _sLine1 `uc ~T0 @X0 -> 100 `i e ]
+[; ;Master.h: 179: uint8_t sLine1[100];
+"180
+[v _sLine2 `uc ~T0 @X0 -> 100 `i e ]
+[; ;Master.h: 180: uint8_t sLine2[100];
+"184
+[v _giMonthEndTbl `uc ~T0 @X0 -> 0 `x e ]
+[i _giMonthEndTbl
+:U ..
+-> -> 31 `i `uc
+-> -> 28 `i `uc
+-> -> 31 `i `uc
+-> -> 30 `i `uc
+-> -> 31 `i `uc
+-> -> 30 `i `uc
+-> -> 31 `i `uc
+-> -> 31 `i `uc
+-> -> 30 `i `uc
+-> -> 31 `i `uc
+-> -> 30 `i `uc
+-> -> 31 `i `uc
+..
+]
+[; ;Master.h: 184: uint8_t giMonthEndTbl[] = {31,28,31,30,31,30,31,31,30,31,30,31};
+"185
+[v _giTotalSecs `ui ~T0 @X0 1 e ]
+[i _giTotalSecs
+-> -> 0 `i `ui
+]
+[; ;Master.h: 185: uint16_t giTotalSecs = 0;
+"186
+[v _giSecs `uc ~T0 @X0 1 e ]
+[i _giSecs
+-> -> 0 `i `uc
+]
+[; ;Master.h: 186: uint8_t giSecs = 0;
+"187
+[v _giMins `uc ~T0 @X0 1 e ]
+[i _giMins
+-> -> 0 `i `uc
+]
+[; ;Master.h: 187: uint8_t giMins = 0;
+"188
+[v _giHours `uc ~T0 @X0 1 e ]
+[i _giHours
+-> -> 0 `i `uc
+]
+[; ;Master.h: 188: uint8_t giHours = 0;
+"189
+[v _giDay `uc ~T0 @X0 1 e ]
+[i _giDay
+-> -> 1 `i `uc
+]
+[; ;Master.h: 189: uint8_t giDay = 1;
+"190
+[v _giMonth `uc ~T0 @X0 1 e ]
+[i _giMonth
+-> -> 4 `i `uc
+]
+[; ;Master.h: 190: uint8_t giMonth = 4;
+"191
+[v _giYear `uc ~T0 @X0 1 e ]
+[i _giYear
+-> -> 21 `i `uc
+]
+[; ;Master.h: 191: uint8_t giYear = 21;
+"199
+[v _giBacklight_Timer `ui ~T0 @X0 1 e ]
+[i _giBacklight_Timer
+-> -> 0 `i `ui
+]
+[; ;Master.h: 199: uint16_t giBacklight_Timer = 0;
+"26 pin_manager.c
 [v _PIN_MANAGER_Initialize `(v ~T0 @X0 1 ef ]
-"26
+"27
 {
-[; ;pin_manager.c: 25: void PIN_MANAGER_Initialize(void)
-[; ;pin_manager.c: 26: {
+[; ;pin_manager.c: 26: void PIN_MANAGER_Initialize(void)
+[; ;pin_manager.c: 27: {
 [e :U _PIN_MANAGER_Initialize ]
 [f ]
-[; ;pin_manager.c: 34: LATA = 0x00;
-"34
-[e = _LATA -> -> 0 `i `uc ]
-[; ;pin_manager.c: 35: LATB = 0x00;
+[; ;pin_manager.c: 35: LATA = 0x00;
 "35
-[e = _LATB -> -> 0 `i `uc ]
-[; ;pin_manager.c: 36: LATC = 0x00;
+[e = _LATA -> -> 0 `i `uc ]
+[; ;pin_manager.c: 36: LATB = 0x00;
 "36
+[e = _LATB -> -> 0 `i `uc ]
+[; ;pin_manager.c: 37: LATC = 0x00;
+"37
 [e = _LATC -> -> 0 `i `uc ]
-[; ;pin_manager.c: 45: TRISA = 0x00;
-"45
-[e = _TRISA -> -> 0 `i `uc ]
-[; ;pin_manager.c: 46: TRISB = 0x00;
-"46
-[e = _TRISB -> -> 0 `i `uc ]
-[; ;pin_manager.c: 47: TRISC = 0x04;
+[; ;pin_manager.c: 47: TRISA = 0xff;
 "47
-[e = _TRISC -> -> 4 `i `uc ]
-[; ;pin_manager.c: 63: ADCON1 = 0x00;
-"63
-[e = _ADCON1 -> -> 0 `i `uc ]
-[; ;pin_manager.c: 64: ADCON2 = 0x00;
-"64
-[e = _ADCON2 -> -> 0 `i `uc ]
-[; ;pin_manager.c: 72: INTCON2bits.nRBPU = 1;
-"72
+[e = _TRISA -> -> 255 `i `uc ]
+[; ;pin_manager.c: 48: TRISB = 0xff;
+"48
+[e = _TRISB -> -> 255 `i `uc ]
+[; ;pin_manager.c: 49: TRISC = 0xff;
+"49
+[e = _TRISC -> -> 255 `i `uc ]
+[; ;pin_manager.c: 52: TRISB = 0;
+"52
+[e = _TRISB -> -> 0 `i `uc ]
+[; ;pin_manager.c: 53: TRISAbits.RA1 = 0;
+"53
+[e = . . _TRISAbits 1 1 -> -> 0 `i `uc ]
+[; ;pin_manager.c: 54: TRISAbits.RA3 = 0;
+"54
+[e = . . _TRISAbits 1 3 -> -> 0 `i `uc ]
+[; ;pin_manager.c: 55: TRISAbits.RA2 = 0;
+"55
+[e = . . _TRISAbits 1 2 -> -> 0 `i `uc ]
+[; ;pin_manager.c: 56: TRISAbits.RA4 = 0;
+"56
+[e = . . _TRISAbits 1 4 -> -> 0 `i `uc ]
+[; ;pin_manager.c: 57: TRISAbits.TRISA5 = 0;
+"57
+[e = . . _TRISAbits 0 5 -> -> 0 `i `uc ]
+[; ;pin_manager.c: 58: TRISCbits.RC0 = 0;
+"58
+[e = . . _TRISCbits 1 0 -> -> 0 `i `uc ]
+[; ;pin_manager.c: 59: TRISCbits.RC1 = 0;
+"59
+[e = . . _TRISCbits 1 1 -> -> 0 `i `uc ]
+[; ;pin_manager.c: 60: TRISCbits.RC6 = 0;
+"60
+[e = . . _TRISCbits 1 4 -> -> 0 `i `uc ]
+[; ;pin_manager.c: 61: TRISCbits.RC7 = 0;
+"61
+[e = . . _TRISCbits 1 5 -> -> 0 `i `uc ]
+[; ;pin_manager.c: 81: ADCON1 = 0x0e;
+"81
+[e = _ADCON1 -> -> 14 `i `uc ]
+[; ;pin_manager.c: 89: INTCON2bits.nRBPU = 1;
+"89
 [e = . . _INTCON2bits 1 7 -> -> 1 `i `uc ]
-[; ;pin_manager.c: 73: }
-"73
-[e :UE 322 ]
+[; ;pin_manager.c: 90: }
+"90
+[e :UE 325 ]
 }

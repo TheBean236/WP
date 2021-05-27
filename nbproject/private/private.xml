@@ -5,15 +5,16 @@
         <group>
             <file>file:/C:/Users/MBend/OneDrive/Electronics/WaterDepth/MPLab/LCD.c</file>
             <file>file:/C:/Users/MBend/OneDrive/Electronics/WaterDepth/MPLab/Timer_0.c</file>
-            <file>file:/C:/Program%20Files/Microchip/xc8/v2.32/pic/sources/c90/common/doprnt.c</file>
-            <file>file:/C:/Users/MBend/OneDrive/Electronics/WaterDepth/MPLab/CCP1.c</file>
+            <file>file:/C:/Users/MBend/OneDrive/Electronics/WaterDepth/MPLab/DepthDetection.c</file>
+            <file>file:/C:/Users/MBend/OneDrive/Electronics/WaterDepth/MPLab/CommonRoutines.h</file>
+            <file>file:/C:/Users/MBend/OneDrive/Electronics/WaterDepth/MPLab/Interrupt_Mgr.c</file>
+            <file>file:/C:/Users/MBend/OneDrive/Electronics/WaterDepth/MPLab/CCP2.c</file>
+            <file>file:/C:/Users/MBend/OneDrive/Electronics/WaterDepth/MPLab/TempCalc.c</file>
             <file>file:/C:/Users/MBend/OneDrive/Electronics/WaterDepth/MPLab/Master.h</file>
-            <file>file:/C:/Users/MBend/OneDrive/Electronics/WaterDepth/MPLab/Timer_2.c</file>
+            <file>file:/C:/Users/MBend/OneDrive/Electronics/WaterDepth/MPLab/pin_manager.c</file>
+            <file>file:/C:/Users/MBend/OneDrive/Electronics/WaterDepth/MPLab/Timer2.h</file>
             <file>file:/C:/Users/MBend/OneDrive/Electronics/WaterDepth/MPLab/LCD.h</file>
-            <file>file:/C:/Users/MBend/OneDrive/Electronics/WaterDepth/MPLab/Timer_1.c</file>
-            <file>file:/C:/Users/MBend/OneDrive/Electronics/WaterDepth/MPLab/Timer0.h</file>
             <file>file:/C:/Users/MBend/OneDrive/Electronics/WaterDepth/MPLab/main.c</file>
-            <file>file:/C:/Users/MBend/OneDrive/Electronics/WaterDepth/MPLab/Timer_3.c</file>
         </group>
     </open-files>
 </project-private>

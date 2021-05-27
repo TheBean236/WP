@@ -5025,7 +5025,7 @@ typedef uint16_t uintptr_t;
 # 15 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\stdbool.h"
 typedef unsigned char bool;
 
-# 32 "Master.h"
+# 53 "Master.h"
 typedef union EchoPeriod_tag
 {
 struct
@@ -5040,13 +5040,32 @@ uint16_t EP16;
 } EchoPeriod_t;
 volatile EchoPeriod_t giEchoCounter;
 
-# 75
+# 156
 volatile char gsCurrDate[] = "01/04/21";
 volatile char gsCurrTime[] = "01:00:00";
 volatile char gsTotalSecs[] = "---";
 
+
 volatile bool gb_UpdateTime = 0;
 volatile bool gb_EchoDetected = 0;
+volatile bool gb_Temp_Captured = 0;
+volatile bool gb_Temp_Done = 0;
+
+
+volatile bool gb_TempCaptured = 0;
+volatile uint16_t giTempCapture;
+volatile float gfAirTempC;
+volatile int giAirTempC;
+volatile int giAirTempF;
+
+
+volatile uint16_t giGals;
+volatile uint16_t giPercentFull;
+volatile uint16_t giEmptySpace_mm;
+
+
+uint8_t sLine1[100];
+uint8_t sLine2[100];
 
 
 
@@ -5059,10 +5078,10 @@ uint8_t giDay = 1;
 uint8_t giMonth = 4;
 uint8_t giYear = 21;
 
-# 99
+# 199
 uint16_t giBacklight_Timer = 0;
 
-# 15 "CommonRoutines.h"
+# 14 "CommonRoutines.h"
 void Timer0_Init(void);
 void Timer0_ISR(void);
 void Timer0_Reset(void);
@@ -5087,6 +5106,7 @@ void Timer3_Init(void);
 void Timer3_ISR (void);
 
 
+
 void CCP1_Init (void);
 void CCP1_ISR (void);
 void CCP1_Activate (void);
@@ -5096,13 +5116,21 @@ void CCP2_Init (void);
 void CCP2_ISR (void);
 
 
+
+void AN0_Init (void);
+void AN0_ISR (void);
+void CaptureTemp (void);
+void ComputeTemp (void);
+
 void ComputeWaterVol (void);
 
-# 77 "LCD.h"
+
 void LCD_Init (void);
+void LCD_DisplayResults (void);
 void LCD_WriteChar (uint8_t iChar);
 void LCD_WriteCmd (uint8_t iCmd, uint16_t iDelay);
 void LCD_WriteString (uint8_t *iData);
+void LCD_WriteLine (uint8_t *iData);
 void LCD_ClearScreen (void);
 void LCD_GoTo (uint8_t iLine, uint8_t iPos);
 void LCD_Busy (void);
@@ -5230,26 +5258,16 @@ extern char * strichr(const char *, int);
 extern char * strrchr(const char *, int);
 extern char * strrichr(const char *, int);
 
-# 24 "main.c"
+# 8 "main.c"
 double gd_Temp;
-double gd_TankSurfArea_mm2;
-double gd_SensorHeight_mm;
-double gd_TankGalsPer_mm;
-double gd_MaxWaterHeight_mm;
-double gd_Default_SOS;
 
 void InitTankVariables (void);
 void ComputeWaterVol (void);
 
-# 44
-uint8_t sLine1[100];
-uint8_t sLine2[100];
-
-
+# 17
 bool gbBacklight_On = 0;
-bool giBacklight_Timeout = 1;
+bool giBacklight_Timeout = 2;
 
-# 55
 void SysInit (void);
 void ComputeTOD (void);
 
@@ -5265,45 +5283,53 @@ LCD_WriteString ((uint8_t *)"Loading... ");
 }
 
 
-giBacklight_Timeout = (PORTCbits.RC0) ? 180 : 2;
+giBacklight_Timeout = (PORTCbits.RC5 == 1) ? 180 : 2;
 
 InitTankVariables();
 Timer0_Init();
 Timer1_Init();
 Timer2_Init();
-
 CCP1_Init();
 CCP2_Init();
+AN0_Init();
 
 INTCONbits.GIE = 1;
 INTCONbits.PEIE = 1;
 
+# 59
 while (1)
 {
+if (gb_TempCaptured)
+{
+gb_TempCaptured = 0;
+ComputeTemp();
+StartDepthDetection();
+}
+
 if (gb_EchoDetected)
 {
 ComputeWaterVol();
 gb_EchoDetected = 0;
 }
+
 if (gb_UpdateTime)
 {
 ComputeTOD();
 gb_UpdateTime = 0;
 }
 
-
 if (!gbBacklight_On)
 {
-if (PORTCbits.RC4)
+if (PORTCbits.RC4 == 1)
 {
-LATAbits.LA4 = 1;
+LATAbits.LATA4 = 1;
 gbBacklight_On = 1;
 giBacklight_Timer = 0;
 }
 } else {
 if (giBacklight_Timer > giBacklight_Timeout)
 {
-if (!PORTCbits.RC4)
+if (PORTCbits.RC4 == 0)
 {
 gbBacklight_On = 0;
 LATAbits.LATA4 = 0;
@@ -5311,68 +5337,6 @@ LATAbits.LATA4 = 0;
 }
 }
 }
-}
-
-void ComputeWaterVol()
-{
-float dCurrTemp;
-float dSOS = gd_Default_SOS;
-float d_mmPerTick;
-float dEmptySpace_mm;
-float dWaterHeight_mm;
-float dWaterVol;
-float dEchoPeriod;
-uint8_t iPercentFull;
-uint16_t iGals;
-
-dEchoPeriod = giEchoCounter.EP16 * 500.0e-9;
-dCurrTemp = 20.0;
-dSOS = 331.3e3 * sqrt( 1 + (dCurrTemp / 273.15));
-d_mmPerTick = dSOS * 500.0e-9 / 2;
-
-
-dEmptySpace_mm = (giEchoCounter.EP16 - 4400) * d_mmPerTick;
-
-
-if (2 == 2)
-{
-dWaterHeight_mm = gd_SensorHeight_mm - dEmptySpace_mm;
-dWaterVol = dWaterHeight_mm * gd_TankGalsPer_mm;
-iPercentFull = dWaterHeight_mm * 100 / gd_MaxWaterHeight_mm;
-iGals = dWaterVol;
-} else {
-iPercentFull = 50;
-iGals = 100;
-}
-
-# 154
-if (PORTAbits.RA0)
-{
-if (iPercentFull < 10) PORTAbits.RA0 = 0;
-} else {
-if (iPercentFull > 70) PORTAbits.RA0 = 1;
-}
-
-if (1)
-{
-LCD_GoTo (0, 0);
-sprintf(sLine1, "Gals: %4.0u   %3.1u%% ", iGals, iPercentFull);
-LCD_WriteString (sLine1);
-
-LCD_GoTo(1, 0);
-sprintf(sLine2, "Echo: %4.0f      ", dEmptySpace_mm);
-LCD_WriteString (sLine2);
-__nop();
-}
-}
-
-void InitTankVariables (void)
-{
-gd_TankSurfArea_mm2 = 3.1416926f * pow(48 * 25.4 / 2, 2);
-gd_SensorHeight_mm = 72 * 25.4;
-gd_TankGalsPer_mm = gd_TankSurfArea_mm2 * 264.172052e-9;
-gd_MaxWaterHeight_mm = 68 * 25.4;
-gd_Default_SOS = 331.3e3 * sqrt( 1 + (20.0 / 273.15));
 }
 
 void ComputeTOD()
@@ -5396,7 +5360,7 @@ if (1)
 {
 sprintf(gsTotalSecs, "%3i", giTotalSecs);
 LCD_GoTo (1, 12);
-LCD_WriteString (gsTotalSecs);
+
 }
 
 

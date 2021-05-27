@@ -78,9 +78,9 @@ void LCD_Init           (void);
 void LCD_WriteChar      (uint8_t iChar);
 void LCD_WriteCmd       (uint8_t iCmd, uint16_t iDelay);
 void LCD_WriteString    (uint8_t *iData);
+void LCD_WriteLine      (uint8_t *iData);
 void LCD_ClearScreen    (void);
 void LCD_GoTo           (uint8_t iLine, uint8_t iPos);
 void LCD_Busy           (void);
-
 #endif	/* LCD_h */
 

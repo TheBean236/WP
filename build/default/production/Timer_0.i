@@ -5120,7 +5120,7 @@ typedef uint16_t uintptr_t;
 # 15 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\stdbool.h"
 typedef unsigned char bool;
 
-# 32 "Master.h"
+# 53 "Master.h"
 typedef union EchoPeriod_tag
 {
 struct
@@ -5135,13 +5135,32 @@ uint16_t EP16;
 } EchoPeriod_t;
 volatile EchoPeriod_t giEchoCounter;
 
-# 75
+# 156
 volatile char gsCurrDate[] = "01/04/21";
 volatile char gsCurrTime[] = "01:00:00";
 volatile char gsTotalSecs[] = "---";
 
+
 volatile bool gb_UpdateTime = 0;
 volatile bool gb_EchoDetected = 0;
+volatile bool gb_Temp_Captured = 0;
+volatile bool gb_Temp_Done = 0;
+
+
+volatile bool gb_TempCaptured = 0;
+volatile uint16_t giTempCapture;
+volatile float gfAirTempC;
+volatile int giAirTempC;
+volatile int giAirTempF;
+
+
+volatile uint16_t giGals;
+volatile uint16_t giPercentFull;
+volatile uint16_t giEmptySpace_mm;
+
+
+uint8_t sLine1[100];
+uint8_t sLine2[100];
 
 
 
@@ -5154,13 +5173,13 @@ uint8_t giDay = 1;
 uint8_t giMonth = 4;
 uint8_t giYear = 21;
 
-# 99
+# 199
 uint16_t giBacklight_Timer = 0;
 
 # 15 "Timer0.h"
-const uint16_t Timer0_Reload = !(2000000 * 5 / 1000 + 1);
+uint16_t Timer0_Reload = ~(2000000 / 1000 * 5 + 2);
 
-# 22 "CommonRoutines.h"
+# 21 "CommonRoutines.h"
 void Timer1_Init(void);
 void Timer1_ISR(void);
 void Timer1_Reset(void);
@@ -5178,6 +5197,7 @@ void Timer3_Init(void);
 void Timer3_ISR (void);
 
 
+
 void CCP1_Init (void);
 void CCP1_ISR (void);
 void CCP1_Activate (void);
@@ -5187,7 +5207,24 @@ void CCP2_Init (void);
 void CCP2_ISR (void);
 
 
+
+void AN0_Init (void);
+void AN0_ISR (void);
+void CaptureTemp (void);
+void ComputeTemp (void);
+
 void ComputeWaterVol (void);
+
+
+void LCD_Init (void);
+void LCD_DisplayResults (void);
+void LCD_WriteChar (uint8_t iChar);
+void LCD_WriteCmd (uint8_t iCmd, uint16_t iDelay);
+void LCD_WriteString (uint8_t *iData);
+void LCD_WriteLine (uint8_t *iData);
+void LCD_ClearScreen (void);
+void LCD_GoTo (uint8_t iLine, uint8_t iPos);
+void LCD_Busy (void);
 
 # 14 "Timer_0.c"
 bool bIncDays = 0;
@@ -5203,14 +5240,13 @@ INTCONbits.TMR0IF = 0;
 if (LATAbits.LATA5 == 0) LATAbits.LATA5 = 1;
 if (++iSampleCntr == 10)
 {
-LATAbits.LATA5 = 0;
 iSampleCntr = 0;
-StartDepthDetection();
+CaptureTemp();
 }
 
 if (++imSCntr == 200)
 {
-PORTCbits.RC0 = !PORTCbits.RC0;
+
 gb_UpdateTime = 1;
 imSCntr = 0;
 }
@@ -5226,5 +5262,5 @@ INTCONbits.TMR0IF = 0;
 INTCONbits.TMR0IE = 1;
 
 
-T0CON = 0x97;
+T0CON = 0x98;
 }

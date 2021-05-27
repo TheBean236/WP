@@ -1,6 +1,101 @@
 
 # 1 "LCD.c"
 
+# 4 "C:/Program Files (x86)/Microchip/MPLABX/v5.40/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\__size_t.h"
+typedef unsigned size_t;
+
+# 7 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\stdarg.h"
+typedef void * va_list[1];
+
+#pragma intrinsic(__va_start)
+extern void * __va_start(void);
+
+#pragma intrinsic(__va_arg)
+extern void * __va_arg(void *, ...);
+
+# 43 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\stdio.h"
+struct __prbuf
+{
+char * ptr;
+void (* func)(char);
+};
+
+# 29 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\errno.h"
+extern int errno;
+
+# 12 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\conio.h"
+extern void init_uart(void);
+
+extern char getch(void);
+extern char getche(void);
+extern void putch(char);
+extern void ungetch(char);
+
+extern __bit kbhit(void);
+
+# 23
+extern char * cgets(char *);
+extern void cputs(const char *);
+
+# 88 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\stdio.h"
+extern int cprintf(char *, ...);
+#pragma printf_check(cprintf)
+
+
+
+extern int _doprnt(struct __prbuf *, const register char *, register va_list);
+
+
+# 180
+#pragma printf_check(vprintf) const
+#pragma printf_check(vsprintf) const
+
+extern char * gets(char *);
+extern int puts(const char *);
+extern int scanf(const char *, ...) __attribute__((unsupported("scanf() is not supported by this compiler")));
+extern int sscanf(const char *, const char *, ...) __attribute__((unsupported("sscanf() is not supported by this compiler")));
+extern int vprintf(const char *, va_list) __attribute__((unsupported("vprintf() is not supported by this compiler")));
+extern int vsprintf(char *, const char *, va_list) __attribute__((unsupported("vsprintf() is not supported by this compiler")));
+extern int vscanf(const char *, va_list ap) __attribute__((unsupported("vscanf() is not supported by this compiler")));
+extern int vsscanf(const char *, const char *, va_list) __attribute__((unsupported("vsscanf() is not supported by this compiler")));
+
+#pragma printf_check(printf) const
+#pragma printf_check(sprintf) const
+extern int sprintf(char *, const char *, ...);
+extern int printf(const char *, ...);
+
+# 14 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\string.h"
+extern void * memcpy(void *, const void *, size_t);
+extern void * memmove(void *, const void *, size_t);
+extern void * memset(void *, int, size_t);
+
+# 36
+extern char * strcat(char *, const char *);
+extern char * strcpy(char *, const char *);
+extern char * strncat(char *, const char *, size_t);
+extern char * strncpy(char *, const char *, size_t);
+extern char * strdup(const char *);
+extern char * strtok(char *, const char *);
+
+
+extern int memcmp(const void *, const void *, size_t);
+extern int strcmp(const char *, const char *);
+extern int stricmp(const char *, const char *);
+extern int strncmp(const char *, const char *, size_t);
+extern int strnicmp(const char *, const char *, size_t);
+extern void * memchr(const void *, int, size_t);
+extern size_t strcspn(const char *, const char *);
+extern char * strpbrk(const char *, const char *);
+extern size_t strspn(const char *, const char *);
+extern char * strstr(const char *, const char *);
+extern char * stristr(const char *, const char *);
+extern char * strerror(int);
+extern size_t strlen(const char *);
+extern char * strchr(const char *, int);
+extern char * strichr(const char *, int);
+extern char * strrchr(const char *, int);
+extern char * strrichr(const char *, int);
+
 # 18 "C:/Program Files (x86)/Microchip/MPLABX/v5.40/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\xc.h"
 extern const char __xc8_OPTIM_SPEED;
 
@@ -5025,7 +5120,7 @@ typedef uint16_t uintptr_t;
 # 15 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\stdbool.h"
 typedef unsigned char bool;
 
-# 32 "Master.h"
+# 53 "Master.h"
 typedef union EchoPeriod_tag
 {
 struct
@@ -5040,13 +5135,32 @@ uint16_t EP16;
 } EchoPeriod_t;
 volatile EchoPeriod_t giEchoCounter;
 
-# 75
+# 156
 volatile char gsCurrDate[] = "01/04/21";
 volatile char gsCurrTime[] = "01:00:00";
 volatile char gsTotalSecs[] = "---";
 
+
 volatile bool gb_UpdateTime = 0;
 volatile bool gb_EchoDetected = 0;
+volatile bool gb_Temp_Captured = 0;
+volatile bool gb_Temp_Done = 0;
+
+
+volatile bool gb_TempCaptured = 0;
+volatile uint16_t giTempCapture;
+volatile float gfAirTempC;
+volatile int giAirTempC;
+volatile int giAirTempF;
+
+
+volatile uint16_t giGals;
+volatile uint16_t giPercentFull;
+volatile uint16_t giEmptySpace_mm;
+
+
+uint8_t sLine1[100];
+uint8_t sLine2[100];
 
 
 
@@ -5059,7 +5173,7 @@ uint8_t giDay = 1;
 uint8_t giMonth = 4;
 uint8_t giYear = 21;
 
-# 99
+# 199
 uint16_t giBacklight_Timer = 0;
 
 # 77 "LCD.h"
@@ -5067,11 +5181,12 @@ void LCD_Init (void);
 void LCD_WriteChar (uint8_t iChar);
 void LCD_WriteCmd (uint8_t iCmd, uint16_t iDelay);
 void LCD_WriteString (uint8_t *iData);
+void LCD_WriteLine (uint8_t *iData);
 void LCD_ClearScreen (void);
 void LCD_GoTo (uint8_t iLine, uint8_t iPos);
 void LCD_Busy (void);
 
-# 11 "LCD.c"
+# 12 "LCD.c"
 void LCD_Init(void)
 {
 uint8_t iCmd;
@@ -5094,16 +5209,29 @@ iCmd = 0x08 | 0x04 | 0x00 |
 LCD_WriteCmd (iCmd, 40+10);
 }
 
+void LCD_DisplayResults ()
+{
+LCD_GoTo (0, 0);
+sprintf(sLine1, "Gals:%4u  %3u%% ", giGals, giPercentFull);
+LCD_WriteLine (sLine1);
+
+LCD_GoTo(1, 0);
+sprintf(sLine2, "Echo:%4u %2u/%2u", giEmptySpace_mm,
+giAirTempC, giAirTempF);
+LCD_WriteLine (sLine2);
+__nop();
+}
+
 void LCD_WriteCmd (uint8_t iCmd, uint16_t iDelay)
 {
 do { LATAbits.LATA3 = 0; } while(0);
 do { LATAbits.LATA2 = 0; } while(0);
-LATB = iCmd;
-LATC6 = iCmd>>6;
-LATC7 = iCmd>>7;
 do { LATAbits.LATA1 = 1; } while(0);
+LATB = iCmd;
+LATCbits.LATC6 = iCmd>>6;
+LATCbits.LATC7 = iCmd>>7;
 do { LATAbits.LATA1 = 0; } while(0);
-for (int i = 0; i<iDelay; i++)
+for (uint8_t i = 0; i<iDelay; i++)
 _delay((unsigned long)((1)*(8000000/4000000.0)));
 }
 
@@ -5114,8 +5242,8 @@ do { LATAbits.LATA2 = 0; } while(0);
 
 do { LATAbits.LATA1 = 1; } while(0);
 LATB = iChar;
-LATC6 = iChar>>6;
-LATC7 = iChar>>7;
+LATCbits.LATC6 = iChar>>6;
+LATCbits.LATC7 = iChar>>7;
 do { LATAbits.LATA1 = 0; } while(0);
 _delay((unsigned long)((40+10)*(8000000/4000000.0)));
 }
@@ -5127,6 +5255,30 @@ while (iData[ix]) {
 LCD_WriteChar (iData[ix]);
 ix ++;
 }
+}
+void LCD_WriteLine (uint8_t *iData)
+{
+int i;
+uint8_t sLine[17];
+bool bInString = 1;
+
+
+for (i = 0; i < 16; i++)
+{
+if (bInString)
+{
+if (iData[i] == 0)
+{
+bInString = 0;
+iData[i] = " ";
+}
+else
+sLine[i] = iData[i];
+} else
+sLine[i] = " ";
+}
+sLine[i] = 0;
+LCD_WriteString (sLine);
 }
 
 void LCD_GoTo (uint8_t iLine, uint8_t iCharPos)
@@ -5147,13 +5299,6 @@ _delay((unsigned long)((2000)*(8000000/4000000.0)));
 
 void LCD_Busy()
 {
-TRISBbits.RB7 = 1;
-do { LATAbits.LATA2 = 1; } while(0);
-do { LATAbits.LATA3 = 0; } while(0);
-while (PORTBbits.RB7){
-do { LATAbits.LATA1 = 1; } while(0);
-do { LATAbits.LATA1 = 0; } while(0);
-}
-do { LATAbits.LATA2 = 0; } while(0);
-TRISBbits.RB7 = 0;
+
+# 135
 }

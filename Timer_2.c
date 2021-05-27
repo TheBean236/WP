@@ -18,19 +18,7 @@ void Timer2_ISR (void)
     PIR1bits.TMR2IF = 0;    // Clear the interrupt flag
 }
 
-void StartDepthDetection(void)
-{
-    // Clear counters for CCP1
-    // Initialize Timer2 and CCP2
-    // Enable Interrupts for Timer 2
-    // Start Timer 2
-    TMR2 = 0;                   // Ensure starting at zero
-    PIR1bits.TMR2IF     = 0;    // Clear TMR2 interrupt flag
-    PIE1bits.TMR2IE     = 1;    // Enable TMR2 Interrupts
-    T2CONbits.TMR2ON    = 1;    // Start TMR2   
-    CCP1_Activate();            // Activate CCP1 - Capture TMR1 clock
-    T1CONbits.TMR1ON    = 1;    // Start TMR1
-}
+
 
 void Timer2_Init(void)
 {

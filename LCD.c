@@ -4,7 +4,8 @@
  * Comments:
  * Revision history: 
  */
-
+#include <stdio.h>
+#include <string.h>
 #include "Master.h"
 #include "LCD.h"
 
@@ -30,16 +31,29 @@ void LCD_Init(void)
     LCD_WriteCmd (iCmd,  LCD_Delay_SetDisp);
 }
 
+void LCD_DisplayResults ()
+{
+    LCD_GoTo (0, 0);
+    sprintf(sLine1, "Gals:%4u  %3u%% ", giGals, giPercentFull);
+    LCD_WriteLine (sLine1);
+
+    LCD_GoTo(1, 0);
+    sprintf(sLine2, "Echo:%4u %2u/%2u", giEmptySpace_mm, 
+            giAirTempC, giAirTempF);
+    LCD_WriteLine (sLine2);
+    Nop();                      // Allows setting a breakpoint
+}
+
 void LCD_WriteCmd (uint8_t iCmd, uint16_t iDelay)
 {
     LCD_SetCmd();
     LCD_SetWrite();
-    LATB = iCmd;
-    LATC6 = iCmd>>6;
-    LATC7 = iCmd>>7;
     LCD_Enable();
+    LATB = iCmd;
+    Pin_LCD_Data6 = iCmd>>6;
+    Pin_LCD_Data7 = iCmd>>7;
     LCD_Disable();  // Latches the command
-    for (int i = 0; i<iDelay; i++)
+    for (uint8_t i = 0; i<iDelay; i++)
         __delay_us(1);
 }
 
@@ -50,8 +64,8 @@ void LCD_WriteChar(uint8_t iChar)
 
     LCD_Enable();
     LATB = iChar;
-    LATC6 = iChar>>6;
-    LATC7 = iChar>>7;
+    Pin_LCD_Data6 = iChar>>6;
+    Pin_LCD_Data7 = iChar>>7;
     LCD_Disable();  // Latches the data
     __delay_us(LCD_Delay_WriteData);
 }
@@ -63,6 +77,30 @@ void LCD_WriteString (uint8_t *iData)
         LCD_WriteChar (iData[ix]);
         ix ++;
     }
+}
+void LCD_WriteLine (uint8_t *iData)
+{
+    int i;
+    uint8_t sLine[17];
+    bool bInString = true;
+    
+    
+    for (i = 0; i < 16; i++)
+    {
+        if (bInString)
+        {
+            if (iData[i] == 0)
+            {
+                bInString = false;
+                iData[i] = " ";
+            }
+            else
+                sLine[i] = iData[i];
+        } else
+            sLine[i] = " ";
+    }
+    sLine[i] = 0;
+    LCD_WriteString (sLine);
 }
 
 void LCD_GoTo (uint8_t iLine, uint8_t iCharPos)
@@ -83,6 +121,7 @@ void LCD_ClearScreen ()
 
 void LCD_Busy()
 {
+    /*
     TRISBbits.RB7 = 1;          // Make RB7 an input
     LCD_SetRead();              // Tell LCD we want to read
     LCD_SetCmd();               // Command State (RS->0)
@@ -92,4 +131,5 @@ void LCD_Busy()
     }
     LCD_SetWrite();             // Return to default write mode
     TRISBbits.RB7 = 0;          // Return RB7 to an output
+     * */
 }

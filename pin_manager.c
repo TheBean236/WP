@@ -21,6 +21,7 @@
         MPLAB             :  MPLAB X 5.45
 */
 #include "pin_manager.h"
+#include "Master.h"
 
 void PIN_MANAGER_Initialize(void)
 {
@@ -42,16 +43,28 @@ void PIN_MANAGER_Initialize(void)
     TRISE = 0x07;
     TRISD = 0xFF;
 #endif
-    TRISA = 0x00;
-    TRISB = 0x00;
-    TRISC = 0x04;
+    // Pre-initialize all pins as inputs
+    TRISA = 0xff;   // RA1 = Input (A/D)  Rest are outputs
+    TRISB = 0xff;
+    TRISC = 0xff;   // RC 2-5 are inputs. Rest are outputs
 
-    /**
-     Analog v Digital configuration registers
-    */
+    // Set up Output Pins
+    TRISB                   = 0;
+    Pin_LCD_E_TRIS          = 0;
+    Pin_LCD_RS_TRIS         = 0;
+    Pin_LCD_RW_TRIS         = 0;
+    Pin_LCD_BackLite_TRIS   = 0;
+    Pin_Tx_Enable_TRIS      = 0;
+    Pin_Relay_TRIS          = 0;
+    Pin_40Khz_TRIS          = 0;
+    Pin_LCD_Data6_TRIS      = 0;
+    Pin_LCD_Data7_TRIS      = 0;
+    
+    /*---------------------------------------------------------------
+                Analog v Digital configuration registers
+     * ---------------------------------------------------------------*/
     
 #ifdef _18F45K50
-
     ANSELE = 0x07;
     ANSELD = 0xFF;
     ANSELC = 0x00;
@@ -59,9 +72,13 @@ void PIN_MANAGER_Initialize(void)
     ANSELA = 0x00;
 #endif
     
+    /* ---------------------- A/D Converters: --------------------
+     *  AN0     = A/D, Vref+ = Vdd,  Vref- + Vss
+     * 
+     *  ADCON2: Right Justified, Clock = Fosc, Acu Time = 2Tad
+     * ----------------------------------------------------------  */
 #ifdef _18F2455
-    ADCON1 = 0x00;      // Configure all ports as digital
-    ADCON2 = 0x00;
+    ADCON1 = 0x0e;      // AN0 as Analog. All rest digital
 #endif
 
 #ifdef _18F45K50

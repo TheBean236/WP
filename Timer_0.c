@@ -24,14 +24,13 @@ void Timer0_ISR(void) {
     if (Pin_Tx_Enable == 0) Pin_Tx_Enable = 1;
     if (++iSampleCntr == gcSampleRate)
     {
-        Pin_Tx_Enable = 0;
         iSampleCntr = 0;
-        StartDepthDetection();
+        CaptureTemp();
     }
     
     if (++imSCntr == 200)       // > IF : Another second has passed
     {
-        PORTCbits.RC0 = !PORTCbits.RC0;
+        //PORTCbits.RC0 = !PORTCbits.RC0;
         gb_UpdateTime = true;
         imSCntr = 0;
     }
