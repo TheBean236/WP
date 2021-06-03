@@ -5053,7 +5053,9 @@ typedef uint16_t uintptr_t;
 # 15 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\stdbool.h"
 typedef unsigned char bool;
 
-# 53 "Master.h"
+# 74 "Master.h"
+uint16_t gi_SW_Time;
+
 typedef union EchoPeriod_tag
 {
 struct
@@ -5068,7 +5070,7 @@ uint16_t EP16;
 } EchoPeriod_t;
 volatile EchoPeriod_t giEchoCounter;
 
-# 156
+# 178
 volatile char gsCurrDate[] = "01/04/21";
 volatile char gsCurrTime[] = "01:00:00";
 volatile char gsTotalSecs[] = "---";
@@ -5106,14 +5108,13 @@ uint8_t giDay = 1;
 uint8_t giMonth = 4;
 uint8_t giYear = 21;
 
-# 199
+# 221
 uint16_t giBacklight_Timer = 0;
 
 # 14 "CommonRoutines.h"
 void Timer0_Init(void);
 void Timer0_ISR(void);
 void Timer0_Reset(void);
-
 
 
 
@@ -5163,12 +5164,12 @@ void LCD_ClearScreen (void);
 void LCD_GoTo (uint8_t iLine, uint8_t iPos);
 void LCD_Busy (void);
 
-# 13 "DepthDetection.c"
-double gd_TankSurfArea_mm2;
-double gd_SensorHeight_mm;
-double gd_TankGalsPer_mm;
-double gd_MaxWaterHeight_mm;
-double gd_Default_SOS;
+# 14 "DepthDetection.c"
+float gfTankSurfArea_mm2;
+float gfSensorHeight_mm;
+float gfTankGalsPer_mm;
+float gfMaxWaterHeight_mm;
+float gfDefault_SOS;
 
 void StartDepthDetection(void)
 {
@@ -5187,6 +5188,7 @@ T1CONbits.TMR1ON = 1;
 
 void ComputeWaterVol()
 {
+{ TMR3H = 0; TMR3L = 0; T3CONbits.TMR3ON = 1;};
 float dCurrTemp;
 float d_mmPerTick;
 float dEmptySpace_mm;
@@ -5207,9 +5209,9 @@ dEmptySpace_mm = (giEchoCounter.EP16 - 4400) * d_mmPerTick;
 else
 dEmptySpace_mm = giEchoCounter.EP16 * d_mmPerTick;
 giEmptySpace_mm = dEmptySpace_mm;
-dWaterHeight_mm = gd_SensorHeight_mm - dEmptySpace_mm;
-dWaterVol = dWaterHeight_mm * gd_TankGalsPer_mm;
-giPercentFull = dWaterHeight_mm * 100 / gd_MaxWaterHeight_mm;
+dWaterHeight_mm = gfSensorHeight_mm - dEmptySpace_mm;
+dWaterVol = dWaterHeight_mm * gfTankGalsPer_mm;
+giPercentFull = dWaterHeight_mm * 100 / gfMaxWaterHeight_mm;
 giGals = round(dWaterVol);
 
 
@@ -5222,13 +5224,19 @@ if (giPercentFull > 80) LATCbits.LATC0 = 1;
 }
 
 if (1) LCD_DisplayResults();
+{T3CONbits.TMR3ON = 0;};
+{ gi_SW_Time = TMR3L; gi_SW_Time += TMR3H << 8;};
+__nop();
 }
 
 void InitTankVariables (void)
 {
-gd_TankSurfArea_mm2 = 3.1416926f * pow(48 * 25.4 / 2, 2);
-gd_SensorHeight_mm = 72 * 25.4;
-gd_TankGalsPer_mm = gd_TankSurfArea_mm2 * 264.172052e-9;
-gd_MaxWaterHeight_mm = 68 * 25.4;
-gd_Default_SOS = 331.3e3 * sqrt( 1 + (20.0 / 273.15));
+if (1 == 0)
+gfTankSurfArea_mm2 = 3.1416926 * pow(48 * 25.4 / 2, 2);
+else
+gfTankSurfArea_mm2 = (24 * 25.4) * (24 * 25.4);
+gfSensorHeight_mm = 72 * 25.4;
+gfTankGalsPer_mm = gfTankSurfArea_mm2 * 264.172052e-9;
+gfMaxWaterHeight_mm = 68 * 25.4;
+gfDefault_SOS = 331.3e3 * sqrt( 1 + (22.22 / 273.15));
 }

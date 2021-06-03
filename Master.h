@@ -26,29 +26,52 @@
 #define S_Clock     8000000
 #define I_Clock     2000000
 #define Vcc         5.075
-#define Vref        3.9
-#define SensorType  0
+#define LCD         true
+// uSonic Sensor Type
 #define DigitalSensor   0
 #define AnalogSensor    1
-#define LCD         true
+#define SensorType      DigitalSensor
+// LCD Interface
+#define LCD_BusSize     8
+
 // Sample Rate is in number of 5 ms increments (e.g. 100 = 1/2 second)
+// Min Sample Rate = 10 (50 ms)
+//  Water Depth Calc    = 20ms (including LCD Write)
+//  Temp Calc           = 15ms
 #define gcSampleRate    10
 
-// Known Constants
-#define gc_pi           3.1416926f
+// ------------------------- Known Constants ----------------------------
+#define gc_pi           3.1416926
 #define gc_SOS_at_0     331.3e3
 #define gc_AbsZero      273.15   
 #define gc_GalsPer_mm3  264.172052e-9 
-#define gc_DefaultTemp  20.0
 #define gc_TickPeriod   500.0e-9
 #define gc_mmPerIn      25.4
 
-// Tank Dimensions
-#define gc_TankDiam_In          48
-#define gc_SensorHeight_In      72
-#define gc_MaxWaterHeight_In    68
-#define gc_RelayOnPercent       80
-#define gc_RelayOffPercent      25
+// Default Temp = 72 Deg F = 22.22 Deg C
+#define gc_DefaultTemp  22.22
+
+// A/D Resistor Calculation Macros
+#define RsOnTop(R2, ADmax, AD)     ((R2 * (ADmax - AD)) / AD)
+#define RsOnBottom(R1, ADmax, AD)  ((R1 * AD) / (ADmax - AD))
+
+/* ------------------------ Tank Dimensions ---------------------------
+ * NOTE: All tank dimensions are in Inches
+ *       Initialization routine will convert to mm
+ * --------------------------------------------------------------------- */
+#define gcTankCylinder          0
+#define gcTankRectangle         1
+#define gcTankType              gcTankRectangle
+#define gcTankDiameter          48.
+#define gcSensorHeight          72.
+#define gcTankWidth             12.125
+#define gcTankLength            15.5
+#define gcMaxWaterHeight        8.0
+#define gcRelayOnPercent        80
+#define gcRelayOffPercent       25
+
+// gi_SW_Time is used to compute module execution times
+uint16_t gi_SW_Time;        // SW Timer - Number of instructions executed
 
 typedef union EchoPeriod_tag
 {
@@ -65,10 +88,12 @@ typedef union EchoPeriod_tag
 volatile EchoPeriod_t giEchoCounter;
 
 // ------------------------  Timer Setup  --------------------------
-// Timer 0 (Time-of-Day)
+// Timer 0 (Time-of-Day & Sample Timer)
+#define T3_Period       5
+#define T0_Freq         (1000 / T0_Period)
 
 // Timer 1 (Echo Timer) is in uS
-#define T1_Period   0.5f           
+#define T1_Period       0.5f           
  
 // Timer 2 (40Khz Oscillator) 
 #define T2_Period       25
@@ -76,10 +101,7 @@ volatile EchoPeriod_t giEchoCounter;
 #define T2_NumPulses    10
 
 // Timer 3 (Sample Timer) Period is in mSeconds
-// e.g. 1 sample every 5 ms
-#define T3_Prescale     8
-#define T3_Period       5
-#define T3_Freq         (1000 / T3_Period)
+// Used for module execution timings only
 
 // --------------------  Port A Pin Definitions  ---------------------
 // RA0 - Thermistor A/D
@@ -134,13 +156,13 @@ volatile EchoPeriod_t giEchoCounter;
 
 // RC4 - Backlight Request
 #define Pin_BkLite_Req          PORTCbits.RC4
-#define Pin_BkLite_Req_LAT      LATCbits.LATC4
-#define Pin_BkLite_Req_TRIS     TRISCbits.RC4
+    // RC4 has no LAT
+    // RC4 has no TRIS - Input only
 
 // RC5 - 3-min backlight option
 #define Pin_3Min_Opt            PORTCbits.RC5
-#define Pin_3Min_Opt_LAT        LATCbits.LATC5
-#define Pin_3Min_Opt_TRIS       TRISCbits.RC5
+    // RC5 has no LAT
+    // RC5 has no TRIS - Input Only
 
 // RC6 - LCD Data 6
 #define Pin_LCD_Data6       LATCbits.LATC6
@@ -165,10 +187,10 @@ volatile bool gb_Temp_Done      = false;
 
 // Thermistor Globals (Air Temp)
 volatile bool gb_TempCaptured  = false;
-volatile uint16_t giTempCapture;     // Digital capture to temp A/D Converter
-volatile float gfAirTempC;      // Floating point Deg C
-volatile int giAirTempC;        // in Degrees C
-volatile int giAirTempF;        // in Degrees F
+volatile uint16_t giTempCapture;    // Digital capture to temp A/D Converter
+volatile float gfAirTempC;          // Floating point Deg C
+volatile int giAirTempC;            // in Degrees C
+volatile int giAirTempF;            // in Degrees F
 
 // Water Vol Globals
 volatile uint16_t giGals;           // Gallons of water

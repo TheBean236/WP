@@ -25,6 +25,12 @@
 
 void PIN_MANAGER_Initialize(void)
 {
+    // the following three lines are needed to allow
+    // RC4 and 5 to be used as inputs
+    UCON = 0;       // Disable USB Module
+    UCFG = 0;
+    UCFGbits.UTRDIS = 1;
+    
     /**
     LATx registers
     */

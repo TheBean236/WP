@@ -12,6 +12,16 @@
 
 #include <xc.h> // include processor files - each processor file is guarded.  
 
+/* Timer0 Calculations:
+ *  I_Clock = 2e6
+ *  Pre-Scale = 1:2
+ *  Timer0 Input Clock = 1e6
+ *  Timer0 / 1000 = 1e3 (1 ms)
+ *  Times 5 = 5ms
+ *  Add 2 for the missed clock ticks
+ *  Timer0_Reload = -9998
+ */
+// Pre-scale is 1:2. Below gives a 5ms interrupt rate
 uint16_t Timer0_Reload = ~(I_Clock / 1000 * 5 + 2);  
 
 #endif	/* Timer0_H */

@@ -17,14 +17,14 @@
 #include <string.h>
 
 #include "Master.h"
+#include "SWTimer.h"
 
 // Thermistor Constants
 #define rPrime      0.01763227  
 #define ThermBeta   3950.0
-#define R1Therm     4700
+#define R1Therm     4700.0
 
-// Floating Point Decomposition
-float gfVtherm;     // Voltage at thermistor
+// Floating Point Interim Calclations 
 float gfRtherm;     // Thermistor resistance value
 float gfRRatio;     // Rtherm / rPrime
 float gfLnRRatio;   // ln(gfRRatio)
@@ -39,7 +39,7 @@ void AN0_Init()
 
 void AN0_ISR()
 {
-    giTempCapture = (uint8_t) (ADRESH << 8);
+    giTempCapture = (uint16_t) (ADRESH << 8);
     giTempCapture += ADRESL;
     PIR1bits.ADIF = 0;          // Clear Interrupt Flag
     gb_TempCaptured = true;     // Tell Main we got it.
@@ -54,11 +54,15 @@ void CaptureTemp()
 }
 
 void ComputeTemp()
-{    
-    gfVtherm = (Vcc * giTempCapture)/1023;
-    gfRtherm = gfVtherm * R1Therm / (Vcc - gfVtherm);
+{
+    // NOTE: This routine takes approximately 15 ms to execute. 
+    SWTimer_Start();
+    gfRtherm = RsOnBottom(R1Therm, 1023, giTempCapture);
     gfRRatio = gfRtherm / rPrime;
-    gfLnRRatio = log(gfRRatio);
+    //SWTimer_Start();
+    gfLnRRatio = log(gfRRatio);     // ~ 6ms Execution Time
+    //SWTimer_Stop();
+    //SWTimer_Read();
     gfAirTempC = ThermBeta / gfLnRRatio - gc_AbsZero;
     giAirTempC = (int) round(gfAirTempC);
     giAirTempF = (int) round((gfAirTempC * 9 / 5) + 32);

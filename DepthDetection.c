@@ -8,13 +8,14 @@
 #include <math.h>
 #include "Master.h"
 #include "CommonRoutines.h"
+#include "SWTimer.h"
 
 // Local Vars - Computed in InitTankVariables
-double  gd_TankSurfArea_mm2;
-double  gd_SensorHeight_mm;
-double  gd_TankGalsPer_mm;
-double  gd_MaxWaterHeight_mm;
-double  gd_Default_SOS;
+float  gfTankSurfArea_mm2;
+float  gfSensorHeight_mm;
+float  gfTankGalsPer_mm;
+float  gfMaxWaterHeight_mm;
+float  gfDefault_SOS;
 
 void StartDepthDetection(void)
 {
@@ -33,6 +34,7 @@ void StartDepthDetection(void)
 
 void ComputeWaterVol()
 {
+    SWTimer_Start();
     float dCurrTemp;
     float d_mmPerTick;
     float dEmptySpace_mm;
@@ -53,28 +55,35 @@ void ComputeWaterVol()
     else
         dEmptySpace_mm = giEchoCounter.EP16 * d_mmPerTick;
     giEmptySpace_mm = dEmptySpace_mm;
-    dWaterHeight_mm = gd_SensorHeight_mm - dEmptySpace_mm;
-    dWaterVol      = dWaterHeight_mm * gd_TankGalsPer_mm;
-    giPercentFull = dWaterHeight_mm * 100 / gd_MaxWaterHeight_mm;
+    dWaterHeight_mm = gfSensorHeight_mm - dEmptySpace_mm;
+    dWaterVol      = dWaterHeight_mm * gfTankGalsPer_mm;
+    giPercentFull = dWaterHeight_mm * 100 / gfMaxWaterHeight_mm;
     giGals = round(dWaterVol);      // Simple convert to integer
     
     // See if we need to turn the relay on or off
     // NOTE:    false = 0
     //          true = 1
     if (Pin_Relay == 1) {
-        if (giPercentFull < gc_RelayOffPercent) Pin_Relay = 0;
+        if (giPercentFull < gcRelayOffPercent) Pin_Relay = 0;
     } else {
-        if (giPercentFull > gc_RelayOnPercent) Pin_Relay = 1;
+        if (giPercentFull > gcRelayOnPercent) Pin_Relay = 1;
     }
  
     if (LCD) LCD_DisplayResults();
+    SWTimer_Stop();
+    SWTimer_Read();
+    Nop();
 }
     
     void InitTankVariables (void)
 {
-    gd_TankSurfArea_mm2 = gc_pi * pow(gc_TankDiam_In * gc_mmPerIn / 2, 2);
-    gd_SensorHeight_mm  = gc_SensorHeight_In * gc_mmPerIn;
-    gd_TankGalsPer_mm   = gd_TankSurfArea_mm2 * gc_GalsPer_mm3;
-    gd_MaxWaterHeight_mm = gc_MaxWaterHeight_In * gc_mmPerIn;
-    gd_Default_SOS      = gc_SOS_at_0 * sqrt( 1 + (gc_DefaultTemp / gc_AbsZero));
+    if (gcTankType == gcTankCylinder)   // > IF: It's a Cylinder
+        gfTankSurfArea_mm2 = gc_pi * pow(gcTankDiameter * gc_mmPerIn / 2, 2);
+    else                                // ELSE: It's a rectange
+        gfTankSurfArea_mm2 =    (gcTankWidth * gc_mmPerIn) * 
+                                (gcTankLength * gc_mmPerIn);
+    gfSensorHeight_mm  = gcSensorHeight * gc_mmPerIn;
+    gfTankGalsPer_mm   = gfTankSurfArea_mm2 * gc_GalsPer_mm3;
+    gfMaxWaterHeight_mm = gcMaxWaterHeight * gc_mmPerIn;
+    gfDefault_SOS      = gc_SOS_at_0 * sqrt( 1 + (gc_DefaultTemp / gc_AbsZero));
 }

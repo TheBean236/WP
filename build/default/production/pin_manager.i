@@ -5031,7 +5031,9 @@ typedef uint16_t uintptr_t;
 # 15 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\stdbool.h"
 typedef unsigned char bool;
 
-# 53 "Master.h"
+# 74 "Master.h"
+uint16_t gi_SW_Time;
+
 typedef union EchoPeriod_tag
 {
 struct
@@ -5046,7 +5048,7 @@ uint16_t EP16;
 } EchoPeriod_t;
 volatile EchoPeriod_t giEchoCounter;
 
-# 156
+# 178
 volatile char gsCurrDate[] = "01/04/21";
 volatile char gsCurrTime[] = "01:00:00";
 volatile char gsTotalSecs[] = "---";
@@ -5084,19 +5086,24 @@ uint8_t giDay = 1;
 uint8_t giMonth = 4;
 uint8_t giYear = 21;
 
-# 199
+# 221
 uint16_t giBacklight_Timer = 0;
 
 # 26 "pin_manager.c"
 void PIN_MANAGER_Initialize(void)
 {
 
-# 35
+
+UCON = 0;
+UCFG = 0;
+UCFGbits.UTRDIS = 1;
+
+# 41
 LATA = 0x00;
 LATB = 0x00;
 LATC = 0x00;
 
-# 47
+# 53
 TRISA = 0xff;
 TRISB = 0xff;
 TRISC = 0xff;
@@ -5113,10 +5120,10 @@ TRISCbits.RC1 = 0;
 TRISCbits.RC6 = 0;
 TRISCbits.RC7 = 0;
 
-# 81
+# 87
 ADCON1 = 0x0e;
 
-# 89
+# 95
 INTCON2bits.nRBPU = 1;
 }
 

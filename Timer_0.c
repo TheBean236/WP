@@ -12,8 +12,20 @@
 #include "CommonRoutines.h"
 
 bool bIncDays = false;
-uint16_t imSCntr    = 0;
+uint16_t iTOD_Cntr    = 0;
 uint8_t iSampleCntr = 0;
+
+void Timer0_Init (void)
+{
+    TMR0H   = Timer0_Reload >> 8;
+    TMR0L   = Timer0_Reload;
+
+    INTCONbits.TMR0IF = 0;      // CLear Interrupt Flag
+    INTCONbits.TMR0IE = 1;      // Enable Interrupts
+    
+    // T0PS 1:2; T08BIT 16-bit; T0SE Increment_Lo2Hi; T0CS FOSC/4; TMR0ON enabled; PSA assigned; 
+    T0CON = 0x98;
+}
 
 // Interrupts every 5 mS
 void Timer0_ISR(void) {
@@ -28,23 +40,11 @@ void Timer0_ISR(void) {
         CaptureTemp();
     }
     
-    if (++imSCntr == 200)       // > IF : Another second has passed
+    if (++iTOD_Cntr == 200)       // > IF : Another second has passed
     {
         //PORTCbits.RC0 = !PORTCbits.RC0;
         gb_UpdateTime = true;
-        imSCntr = 0;
+        iTOD_Cntr = 0;
     }
     return;
-}
-
-void Timer0_Init (void)
-{
-    TMR0H   = Timer0_Reload >> 8;
-    TMR0L   = Timer0_Reload;
-
-    INTCONbits.TMR0IF = 0;      // CLear Interrupt Flag
-    INTCONbits.TMR0IE = 1;      // Enable Interrupts
-    
-    // T0PS 1:256; T08BIT 16-bit; T0SE Increment_Lo2Hi; T0CS FOSC/4; TMR0ON enabled; PSA assigned; 
-    T0CON = 0x98;
 }

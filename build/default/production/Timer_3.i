@@ -5025,7 +5025,9 @@ typedef uint16_t uintptr_t;
 # 15 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\stdbool.h"
 typedef unsigned char bool;
 
-# 53 "Master.h"
+# 74 "Master.h"
+uint16_t gi_SW_Time;
+
 typedef union EchoPeriod_tag
 {
 struct
@@ -5040,7 +5042,7 @@ uint16_t EP16;
 } EchoPeriod_t;
 volatile EchoPeriod_t giEchoCounter;
 
-# 156
+# 178
 volatile char gsCurrDate[] = "01/04/21";
 volatile char gsCurrTime[] = "01:00:00";
 volatile char gsTotalSecs[] = "---";
@@ -5078,95 +5080,33 @@ uint8_t giDay = 1;
 uint8_t giMonth = 4;
 uint8_t giYear = 21;
 
-# 199
+# 221
 uint16_t giBacklight_Timer = 0;
 
-# 14 "CommonRoutines.h"
-void Timer0_Init(void);
-void Timer0_ISR(void);
-void Timer0_Reset(void);
-
-
-
-
-void Timer1_Init(void);
-void Timer1_ISR(void);
-void Timer1_Reset(void);
-
-
-
-void Timer2_Init(void);
-void Timer2_ISR(void);
-void StartDepthDetection (void);
-void EndDepthDetection (void);
-
-
-
-void Timer3_Init(void);
-void Timer3_ISR (void);
-
-
-
-void CCP1_Init (void);
-void CCP1_ISR (void);
-void CCP1_Activate (void);
-
-
-void CCP2_Init (void);
-void CCP2_ISR (void);
-
-
-
-void AN0_Init (void);
-void AN0_ISR (void);
-void CaptureTemp (void);
-void ComputeTemp (void);
-
-void ComputeWaterVol (void);
-
-
-void LCD_Init (void);
-void LCD_DisplayResults (void);
-void LCD_WriteChar (uint8_t iChar);
-void LCD_WriteCmd (uint8_t iCmd, uint16_t iDelay);
-void LCD_WriteString (uint8_t *iData);
-void LCD_WriteLine (uint8_t *iData);
-void LCD_ClearScreen (void);
-void LCD_GoTo (uint8_t iLine, uint8_t iPos);
-void LCD_Busy (void);
-
-# 14 "Timer_3.c"
-uint16_t Timer3_Reload = ~((2000000 / 1000) / 8 * (5));
-bool Timer3_Sampling = 0;
-uint16_t Timer3_Cntr = 0;
-
-
-
+# 13 "Timer_3.c"
 void Timer3_ISR (void)
 {
 T3CONbits.TMR3ON = 0;
-TMR3H = (uint8_t)(Timer3_Reload>>8);
-TMR3L = (uint8_t) Timer3_Reload;
+TMR3H = 0;
+TMR3L = 0;
 
 PIR2bits.TMR3IF = 0;
 return;
-
-
-
-
 }
 
 void Timer3_Init(void)
 {
 
-# 42
-T3CON = 0xb9;
+T3CONbits.RD16 = 1;
+T3CONbits.T3CCP1 = 0;
+T3CONbits.T3CCP2 = 0;
+T3CONbits.T3CKPS = 0;
+T3CONbits.TMR3CS = 0;
+T3CONbits.nT3SYNC = 0;
+T3CONbits.TMR3ON = 0;
 
-
-
-
-TMR3H = (uint8_t)(Timer3_Reload>>8);
-TMR3L = (uint8_t) Timer3_Reload;
+TMR3H = 0;
+TMR3L = 0;
 
 PIR2bits.TMR3IF = 0;
 PIE2bits.TMR3IE = 0;

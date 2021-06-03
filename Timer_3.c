@@ -2,51 +2,38 @@
  * File:   Timer3_SampleTimer
  * Author: MBender
  *
- * This timer is for testing only. It fires approximately ever 20 ms
- *      so we can see the progress of the echo mechanism on the scope. 
- * Created on April 10, 2021, 10:40 AM
+ * Timer 3 is currently used as a S/W module timer. It counts the number
+ * of instructions between start and stop.
+ * Control macros can be found in SWTimer.h
  */
 
 #include "Master.h"
-#include "CommonRoutines.h"
-
-// We divide by 1000 as I_Clock is in Seconds and T3_Period is in mS
-uint16_t    Timer3_Reload = ~((I_Clock / 1000) / T3_Prescale * (T3_Period));
-bool        Timer3_Sampling = false;
-uint16_t    Timer3_Cntr = 0;
-
-//Test
+#include "SWTimer.h"
 
 void Timer3_ISR (void)
 {
     T3CONbits.TMR3ON = 0;       // Stop timer while writing
-    TMR3H = (uint8_t)(Timer3_Reload>>8);    
-    TMR3L = (uint8_t) Timer3_Reload;
+    TMR3H = 0;    
+    TMR3L = 0;
 
     PIR2bits.TMR3IF = 0;
     return;
-    //
-    // We've switched the sample timer to TMR0. THis timer is 
-    // not used anymore 
-    //
 }
 
 void Timer3_Init(void)
 {
-#ifdef _18F45K50
-    // T3CKPS 1:8; T3OSCEN disabled; T3SYNC synchronize; TMR3CS FOSC/4; TMR3ON enabled; T3RD16 enabled; 
-    T3CON = 0x33;
-#endif 
-#ifdef _18F2455
-    // 1 0 1 1   1 0 0 1
-    T3CON = 0xb9;
-#endif
+    // Clock source for CCP2 is ignored as CCP2 is in PWM mode
+    T3CONbits.RD16      = 1;    // 16 bit
+    T3CONbits.T3CCP1    = 0;    // Disable CCP2 Timer Source
+    T3CONbits.T3CCP2    = 0;    // Disable CCP1 Timer Source
+    T3CONbits.T3CKPS    = 0;    // Prescale 1:1
+    T3CONbits.TMR3CS    = 0;    // I_Clock clock source
+    T3CONbits.nT3SYNC   = 0;    // Ignored when using internal clock
+    T3CONbits.TMR3ON    = 0;    // Disable timer 3
 
-    //Pin_Tx_Enable = 1;
-    //Load Timer 3 Registers 
-    TMR3H = (uint8_t)(Timer3_Reload>>8);    
-    TMR3L = (uint8_t) Timer3_Reload;
+    TMR3H = 0;    
+    TMR3L = 0;
 
     PIR2bits.TMR3IF = 0;        // Clear I/F
-    PIE2bits.TMR3IE = 0;
+    PIE2bits.TMR3IE = 0;        // Disable Interrupts
 }

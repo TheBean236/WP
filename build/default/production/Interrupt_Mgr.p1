@@ -1,11 +1,11 @@
 Version 3.2 HI-TECH Software Intermediate Code
-"56 Master.h
+"79 Master.h
 [s S323 `uc 1 `uc 1 ]
 [n S323 . EPl EPh ]
-"61
+"84
 [s S324 `ui 1 ]
 [n S324 . EP16 ]
-"53
+"76
 [u S322 `S323 1 `S324 1 ]
 [n S322 EchoPeriod_tag . . ]
 [t ~ __interrupt . k ]
@@ -48,7 +48,7 @@ Version 3.2 HI-TECH Software Intermediate Code
 [n S146 . . . ]
 "3775
 [v _PIR2bits `VS146 ~T0 @X0 0 e@4001 ]
-"35 CommonRoutines.h
+"34 CommonRoutines.h
 [v _Timer3_ISR `(v ~T0 @X0 0 ef ]
 "3476 C:/Program Files (x86)/Microchip/MPLABX/v5.40/packs/Microchip/PIC18Fxxxx_DFP/1.2.26/xc8\pic\include\proc\pic18f2455.h
 [s S135 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
@@ -72,11 +72,11 @@ Version 3.2 HI-TECH Software Intermediate Code
 [n S137 . . . ]
 "3562
 [v _PIR1bits `VS137 ~T0 @X0 0 e@3998 ]
-"40 CommonRoutines.h
+"39 CommonRoutines.h
 [v _CCP1_ISR `(v ~T0 @X0 0 ef ]
-"28
+"27
 [v _Timer2_ISR `(v ~T0 @X0 0 ef ]
-"50
+"49
 [v _AN0_ISR `(v ~T0 @X0 0 ef ]
 [; ;xc8\pic\include\xc.h: 18: extern const char __xc8_OPTIM_SPEED;
 [; ;xc8\pic\include\xc.h: 20: extern double __fpnormalize(double);
@@ -3212,22 +3212,25 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;stdint.h: 289: typedef int16_t intptr_t;
 [; ;stdint.h: 294: typedef uint16_t uintptr_t;
 [; ;stdbool.h: 15: typedef unsigned char bool;
-[; ;Master.h: 53: typedef union EchoPeriod_tag
-[; ;Master.h: 54: {
-[; ;Master.h: 55: struct
-[; ;Master.h: 56: {
-[; ;Master.h: 57: uint8_t EPl;
-[; ;Master.h: 58: uint8_t EPh;
-[; ;Master.h: 59: };
-[; ;Master.h: 60: struct
-[; ;Master.h: 61: {
-[; ;Master.h: 62: uint16_t EP16;
-[; ;Master.h: 63: };
-[; ;Master.h: 64: } EchoPeriod_t;
-"65 Master.h
+"74 Master.h
+[v _gi_SW_Time `ui ~T0 @X0 1 e ]
+[; ;Master.h: 74: uint16_t gi_SW_Time;
+[; ;Master.h: 76: typedef union EchoPeriod_tag
+[; ;Master.h: 77: {
+[; ;Master.h: 78: struct
+[; ;Master.h: 79: {
+[; ;Master.h: 80: uint8_t EPl;
+[; ;Master.h: 81: uint8_t EPh;
+[; ;Master.h: 82: };
+[; ;Master.h: 83: struct
+[; ;Master.h: 84: {
+[; ;Master.h: 85: uint16_t EP16;
+[; ;Master.h: 86: };
+[; ;Master.h: 87: } EchoPeriod_t;
+"88
 [v _giEchoCounter `VS322 ~T0 @X0 1 e ]
-[; ;Master.h: 65: volatile EchoPeriod_t giEchoCounter;
-"156
+[; ;Master.h: 88: volatile EchoPeriod_t giEchoCounter;
+"178
 [v _gsCurrDate `Vuc ~T0 @X0 -> 0 `x e ]
 [i _gsCurrDate
 :U ..
@@ -3242,8 +3245,8 @@ Version 3.2 HI-TECH Software Intermediate Code
 -> 0 `c
 ..
 ]
-[; ;Master.h: 156: volatile char gsCurrDate[] = "01/04/21";
-"157
+[; ;Master.h: 178: volatile char gsCurrDate[] = "01/04/21";
+"179
 [v _gsCurrTime `Vuc ~T0 @X0 -> 0 `x e ]
 [i _gsCurrTime
 :U ..
@@ -3258,8 +3261,8 @@ Version 3.2 HI-TECH Software Intermediate Code
 -> 0 `c
 ..
 ]
-[; ;Master.h: 157: volatile char gsCurrTime[] = "01:00:00";
-"158
+[; ;Master.h: 179: volatile char gsCurrTime[] = "01:00:00";
+"180
 [v _gsTotalSecs `Vuc ~T0 @X0 -> 0 `x e ]
 [i _gsTotalSecs
 :U ..
@@ -3269,65 +3272,65 @@ Version 3.2 HI-TECH Software Intermediate Code
 -> 0 `c
 ..
 ]
-[; ;Master.h: 158: volatile char gsTotalSecs[] = "---";
-"161
+[; ;Master.h: 180: volatile char gsTotalSecs[] = "---";
+"183
 [v _gb_UpdateTime `Vuc ~T0 @X0 1 e ]
 [i _gb_UpdateTime
 -> -> 0 `i `uc
 ]
-[; ;Master.h: 161: volatile bool gb_UpdateTime = 0;
-"162
+[; ;Master.h: 183: volatile bool gb_UpdateTime = 0;
+"184
 [v _gb_EchoDetected `Vuc ~T0 @X0 1 e ]
 [i _gb_EchoDetected
 -> -> 0 `i `uc
 ]
-[; ;Master.h: 162: volatile bool gb_EchoDetected = 0;
-"163
+[; ;Master.h: 184: volatile bool gb_EchoDetected = 0;
+"185
 [v _gb_Temp_Captured `Vuc ~T0 @X0 1 e ]
 [i _gb_Temp_Captured
 -> -> 0 `i `uc
 ]
-[; ;Master.h: 163: volatile bool gb_Temp_Captured = 0;
-"164
+[; ;Master.h: 185: volatile bool gb_Temp_Captured = 0;
+"186
 [v _gb_Temp_Done `Vuc ~T0 @X0 1 e ]
 [i _gb_Temp_Done
 -> -> 0 `i `uc
 ]
-[; ;Master.h: 164: volatile bool gb_Temp_Done = 0;
-"167
+[; ;Master.h: 186: volatile bool gb_Temp_Done = 0;
+"189
 [v _gb_TempCaptured `Vuc ~T0 @X0 1 e ]
 [i _gb_TempCaptured
 -> -> 0 `i `uc
 ]
-[; ;Master.h: 167: volatile bool gb_TempCaptured = 0;
-"168
+[; ;Master.h: 189: volatile bool gb_TempCaptured = 0;
+"190
 [v _giTempCapture `Vui ~T0 @X0 1 e ]
-[; ;Master.h: 168: volatile uint16_t giTempCapture;
-"169
+[; ;Master.h: 190: volatile uint16_t giTempCapture;
+"191
 [v _gfAirTempC `Vf ~T0 @X0 1 e ]
-[; ;Master.h: 169: volatile float gfAirTempC;
-"170
+[; ;Master.h: 191: volatile float gfAirTempC;
+"192
 [v _giAirTempC `Vi ~T0 @X0 1 e ]
-[; ;Master.h: 170: volatile int giAirTempC;
-"171
+[; ;Master.h: 192: volatile int giAirTempC;
+"193
 [v _giAirTempF `Vi ~T0 @X0 1 e ]
-[; ;Master.h: 171: volatile int giAirTempF;
-"174
+[; ;Master.h: 193: volatile int giAirTempF;
+"196
 [v _giGals `Vui ~T0 @X0 1 e ]
-[; ;Master.h: 174: volatile uint16_t giGals;
-"175
+[; ;Master.h: 196: volatile uint16_t giGals;
+"197
 [v _giPercentFull `Vui ~T0 @X0 1 e ]
-[; ;Master.h: 175: volatile uint16_t giPercentFull;
-"176
+[; ;Master.h: 197: volatile uint16_t giPercentFull;
+"198
 [v _giEmptySpace_mm `Vui ~T0 @X0 1 e ]
-[; ;Master.h: 176: volatile uint16_t giEmptySpace_mm;
-"179
+[; ;Master.h: 198: volatile uint16_t giEmptySpace_mm;
+"201
 [v _sLine1 `uc ~T0 @X0 -> 100 `i e ]
-[; ;Master.h: 179: uint8_t sLine1[100];
-"180
+[; ;Master.h: 201: uint8_t sLine1[100];
+"202
 [v _sLine2 `uc ~T0 @X0 -> 100 `i e ]
-[; ;Master.h: 180: uint8_t sLine2[100];
-"184
+[; ;Master.h: 202: uint8_t sLine2[100];
+"206
 [v _giMonthEndTbl `uc ~T0 @X0 -> 0 `x e ]
 [i _giMonthEndTbl
 :U ..
@@ -3345,86 +3348,86 @@ Version 3.2 HI-TECH Software Intermediate Code
 -> -> 31 `i `uc
 ..
 ]
-[; ;Master.h: 184: uint8_t giMonthEndTbl[] = {31,28,31,30,31,30,31,31,30,31,30,31};
-"185
+[; ;Master.h: 206: uint8_t giMonthEndTbl[] = {31,28,31,30,31,30,31,31,30,31,30,31};
+"207
 [v _giTotalSecs `ui ~T0 @X0 1 e ]
 [i _giTotalSecs
 -> -> 0 `i `ui
 ]
-[; ;Master.h: 185: uint16_t giTotalSecs = 0;
-"186
+[; ;Master.h: 207: uint16_t giTotalSecs = 0;
+"208
 [v _giSecs `uc ~T0 @X0 1 e ]
 [i _giSecs
 -> -> 0 `i `uc
 ]
-[; ;Master.h: 186: uint8_t giSecs = 0;
-"187
+[; ;Master.h: 208: uint8_t giSecs = 0;
+"209
 [v _giMins `uc ~T0 @X0 1 e ]
 [i _giMins
 -> -> 0 `i `uc
 ]
-[; ;Master.h: 187: uint8_t giMins = 0;
-"188
+[; ;Master.h: 209: uint8_t giMins = 0;
+"210
 [v _giHours `uc ~T0 @X0 1 e ]
 [i _giHours
 -> -> 0 `i `uc
 ]
-[; ;Master.h: 188: uint8_t giHours = 0;
-"189
+[; ;Master.h: 210: uint8_t giHours = 0;
+"211
 [v _giDay `uc ~T0 @X0 1 e ]
 [i _giDay
 -> -> 1 `i `uc
 ]
-[; ;Master.h: 189: uint8_t giDay = 1;
-"190
+[; ;Master.h: 211: uint8_t giDay = 1;
+"212
 [v _giMonth `uc ~T0 @X0 1 e ]
 [i _giMonth
 -> -> 4 `i `uc
 ]
-[; ;Master.h: 190: uint8_t giMonth = 4;
-"191
+[; ;Master.h: 212: uint8_t giMonth = 4;
+"213
 [v _giYear `uc ~T0 @X0 1 e ]
 [i _giYear
 -> -> 21 `i `uc
 ]
-[; ;Master.h: 191: uint8_t giYear = 21;
-"199
+[; ;Master.h: 213: uint8_t giYear = 21;
+"221
 [v _giBacklight_Timer `ui ~T0 @X0 1 e ]
 [i _giBacklight_Timer
 -> -> 0 `i `ui
 ]
-[; ;Master.h: 199: uint16_t giBacklight_Timer = 0;
+[; ;Master.h: 221: uint16_t giBacklight_Timer = 0;
 [; ;CommonRoutines.h: 14: void Timer0_Init(void);
 [; ;CommonRoutines.h: 15: void Timer0_ISR(void);
 [; ;CommonRoutines.h: 16: void Timer0_Reset(void);
-[; ;CommonRoutines.h: 21: void Timer1_Init(void);
-[; ;CommonRoutines.h: 22: void Timer1_ISR(void);
-[; ;CommonRoutines.h: 23: void Timer1_Reset(void);
-[; ;CommonRoutines.h: 27: void Timer2_Init(void);
-[; ;CommonRoutines.h: 28: void Timer2_ISR(void);
-[; ;CommonRoutines.h: 29: void StartDepthDetection (void);
-[; ;CommonRoutines.h: 30: void EndDepthDetection (void);
-[; ;CommonRoutines.h: 34: void Timer3_Init(void);
-[; ;CommonRoutines.h: 35: void Timer3_ISR (void);
-[; ;CommonRoutines.h: 39: void CCP1_Init (void);
-[; ;CommonRoutines.h: 40: void CCP1_ISR (void);
-[; ;CommonRoutines.h: 41: void CCP1_Activate (void);
-[; ;CommonRoutines.h: 44: void CCP2_Init (void);
-[; ;CommonRoutines.h: 45: void CCP2_ISR (void);
-[; ;CommonRoutines.h: 49: void AN0_Init (void);
-[; ;CommonRoutines.h: 50: void AN0_ISR (void);
-[; ;CommonRoutines.h: 51: void CaptureTemp (void);
-[; ;CommonRoutines.h: 52: void ComputeTemp (void);
-[; ;CommonRoutines.h: 54: void ComputeWaterVol (void);
-[; ;CommonRoutines.h: 57: void LCD_Init (void);
-[; ;CommonRoutines.h: 58: void LCD_DisplayResults (void);
-[; ;CommonRoutines.h: 59: void LCD_WriteChar (uint8_t iChar);
-[; ;CommonRoutines.h: 60: void LCD_WriteCmd (uint8_t iCmd, uint16_t iDelay);
-[; ;CommonRoutines.h: 61: void LCD_WriteString (uint8_t *iData);
-[; ;CommonRoutines.h: 62: void LCD_WriteLine (uint8_t *iData);
-[; ;CommonRoutines.h: 63: void LCD_ClearScreen (void);
-[; ;CommonRoutines.h: 64: void LCD_GoTo (uint8_t iLine, uint8_t iPos);
-[; ;CommonRoutines.h: 65: void LCD_Busy (void);
+[; ;CommonRoutines.h: 20: void Timer1_Init(void);
+[; ;CommonRoutines.h: 21: void Timer1_ISR(void);
+[; ;CommonRoutines.h: 22: void Timer1_Reset(void);
+[; ;CommonRoutines.h: 26: void Timer2_Init(void);
+[; ;CommonRoutines.h: 27: void Timer2_ISR(void);
+[; ;CommonRoutines.h: 28: void StartDepthDetection (void);
+[; ;CommonRoutines.h: 29: void EndDepthDetection (void);
+[; ;CommonRoutines.h: 33: void Timer3_Init(void);
+[; ;CommonRoutines.h: 34: void Timer3_ISR (void);
+[; ;CommonRoutines.h: 38: void CCP1_Init (void);
+[; ;CommonRoutines.h: 39: void CCP1_ISR (void);
+[; ;CommonRoutines.h: 40: void CCP1_Activate (void);
+[; ;CommonRoutines.h: 43: void CCP2_Init (void);
+[; ;CommonRoutines.h: 44: void CCP2_ISR (void);
+[; ;CommonRoutines.h: 48: void AN0_Init (void);
+[; ;CommonRoutines.h: 49: void AN0_ISR (void);
+[; ;CommonRoutines.h: 50: void CaptureTemp (void);
+[; ;CommonRoutines.h: 51: void ComputeTemp (void);
+[; ;CommonRoutines.h: 53: void ComputeWaterVol (void);
+[; ;CommonRoutines.h: 56: void LCD_Init (void);
+[; ;CommonRoutines.h: 57: void LCD_DisplayResults (void);
+[; ;CommonRoutines.h: 58: void LCD_WriteChar (uint8_t iChar);
+[; ;CommonRoutines.h: 59: void LCD_WriteCmd (uint8_t iCmd, uint16_t iDelay);
+[; ;CommonRoutines.h: 60: void LCD_WriteString (uint8_t *iData);
+[; ;CommonRoutines.h: 61: void LCD_WriteLine (uint8_t *iData);
+[; ;CommonRoutines.h: 62: void LCD_ClearScreen (void);
+[; ;CommonRoutines.h: 63: void LCD_GoTo (uint8_t iLine, uint8_t iPos);
+[; ;CommonRoutines.h: 64: void LCD_Busy (void);
 [v $root$_INTERRUPT_InterruptManager `(v ~T0 @X0 0 e ]
 "16 Interrupt_Mgr.c
 [v _INTERRUPT_InterruptManager `(v ~T26 @X0 1 ef ]

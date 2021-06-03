@@ -14,7 +14,6 @@
 void Timer0_Init(void);
 void Timer0_ISR(void);
 void Timer0_Reset(void);
-
 #endif
 
 #ifndef Timer1_H

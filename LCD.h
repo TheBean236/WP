@@ -59,15 +59,15 @@
 #define LCD_CmdSetDAddr         0x80
 
 // Command Execution Delays (uS)
-//   10 us added to some to provide a buffer
+//   1 us added to some to provide a buffer
 #define LCD_Delay_ClearDisp     2000
 #define LCD_Delay_RetHome       2000
-#define LCD_Delay_InputSet      40+10
-#define LCD_Delay_SetDisp       40+10
-#define LCD_Delay_Shift         40+10
-#define LCD_Delay_FunctSet      40+10
-#define LCD_Delay_SetDAddr      40+10
-#define LCD_Delay_WriteData     40+10
+#define LCD_Delay_InputSet      40+1
+#define LCD_Delay_SetDisp       40+1
+#define LCD_Delay_Shift         40+1
+#define LCD_Delay_FunctSet      40+1
+#define LCD_Delay_SetDAddr      40+1
+#define LCD_Delay_WriteData     40+1
 #define LCD_Delay_Busy          1
 
 // DDRAM Line Starting Addresses
@@ -81,6 +81,7 @@ void LCD_WriteString    (uint8_t *iData);
 void LCD_WriteLine      (uint8_t *iData);
 void LCD_ClearScreen    (void);
 void LCD_GoTo           (uint8_t iLine, uint8_t iPos);
-void LCD_Busy           (void);
+void LCD_WaitNotBusy    (void);
+void LCD_WriteNibble    (uint8_t iChar);
 #endif	/* LCD_h */
 

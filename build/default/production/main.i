@@ -5025,7 +5025,9 @@ typedef uint16_t uintptr_t;
 # 15 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\stdbool.h"
 typedef unsigned char bool;
 
-# 53 "Master.h"
+# 74 "Master.h"
+uint16_t gi_SW_Time;
+
 typedef union EchoPeriod_tag
 {
 struct
@@ -5040,7 +5042,7 @@ uint16_t EP16;
 } EchoPeriod_t;
 volatile EchoPeriod_t giEchoCounter;
 
-# 156
+# 178
 volatile char gsCurrDate[] = "01/04/21";
 volatile char gsCurrTime[] = "01:00:00";
 volatile char gsTotalSecs[] = "---";
@@ -5078,14 +5080,13 @@ uint8_t giDay = 1;
 uint8_t giMonth = 4;
 uint8_t giYear = 21;
 
-# 199
+# 221
 uint16_t giBacklight_Timer = 0;
 
 # 14 "CommonRoutines.h"
 void Timer0_Init(void);
 void Timer0_ISR(void);
 void Timer0_Reset(void);
-
 
 
 
@@ -5266,7 +5267,7 @@ void ComputeWaterVol (void);
 
 # 17
 bool gbBacklight_On = 0;
-bool giBacklight_Timeout = 2;
+uint8_t giBacklight_Timeout = 5;
 
 void SysInit (void);
 void ComputeTOD (void);
@@ -5282,13 +5283,15 @@ LCD_Init();
 LCD_WriteString ((uint8_t *)"Loading... ");
 }
 
+__nop();
 
-giBacklight_Timeout = (PORTCbits.RC5 == 1) ? 180 : 2;
+giBacklight_Timeout = (PORTCbits.RC5 == 1) ? 180 : 10;
 
 InitTankVariables();
 Timer0_Init();
 Timer1_Init();
 Timer2_Init();
+Timer3_Init();
 CCP1_Init();
 CCP2_Init();
 AN0_Init();
@@ -5296,7 +5299,7 @@ AN0_Init();
 INTCONbits.GIE = 1;
 INTCONbits.PEIE = 1;
 
-# 59
+# 61
 while (1)
 {
 if (gb_TempCaptured)
@@ -5316,7 +5319,7 @@ if (gb_UpdateTime)
 {
 ComputeTOD();
 gb_UpdateTime = 0;
-}
+
 
 if (!gbBacklight_On)
 {
@@ -5327,12 +5330,13 @@ gbBacklight_On = 1;
 giBacklight_Timer = 0;
 }
 } else {
-if (giBacklight_Timer > giBacklight_Timeout)
+if (++giBacklight_Timer > giBacklight_Timeout)
 {
 if (PORTCbits.RC4 == 0)
 {
 gbBacklight_On = 0;
 LATAbits.LATA4 = 0;
+}
 }
 }
 }

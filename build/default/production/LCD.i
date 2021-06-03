@@ -5120,7 +5120,9 @@ typedef uint16_t uintptr_t;
 # 15 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\stdbool.h"
 typedef unsigned char bool;
 
-# 53 "Master.h"
+# 74 "Master.h"
+uint16_t gi_SW_Time;
+
 typedef union EchoPeriod_tag
 {
 struct
@@ -5135,7 +5137,7 @@ uint16_t EP16;
 } EchoPeriod_t;
 volatile EchoPeriod_t giEchoCounter;
 
-# 156
+# 178
 volatile char gsCurrDate[] = "01/04/21";
 volatile char gsCurrTime[] = "01:00:00";
 volatile char gsTotalSecs[] = "---";
@@ -5173,7 +5175,7 @@ uint8_t giDay = 1;
 uint8_t giMonth = 4;
 uint8_t giYear = 21;
 
-# 199
+# 221
 uint16_t giBacklight_Timer = 0;
 
 # 77 "LCD.h"
@@ -5184,7 +5186,8 @@ void LCD_WriteString (uint8_t *iData);
 void LCD_WriteLine (uint8_t *iData);
 void LCD_ClearScreen (void);
 void LCD_GoTo (uint8_t iLine, uint8_t iPos);
-void LCD_Busy (void);
+void LCD_WaitNotBusy (void);
+void LCD_WriteNibble (uint8_t iChar);
 
 # 12 "LCD.c"
 void LCD_Init(void)
@@ -5192,21 +5195,24 @@ void LCD_Init(void)
 uint8_t iCmd;
 
 _delay((unsigned long)((15)*(8000000/4000.0)));
+
+# 31
 iCmd = 0x20 | 0x10 | 0x08 | 0x04;
-LCD_WriteCmd (iCmd, 40+10);
+LCD_WriteCmd (iCmd, 40+1);
+
 
 iCmd = 0x08 | 0x00 | 0x00 |
 0x00;
-LCD_WriteCmd (iCmd, 40+10);
+LCD_WriteCmd (iCmd, 40+1);
 
 iCmd = 0x04 | 0x02 | 0x00;
-LCD_WriteCmd (iCmd, 40+10);
+LCD_WriteCmd (iCmd, 40+1);
 
 LCD_WriteCmd (0x01, 2000);
 
 iCmd = 0x08 | 0x04 | 0x00 |
 0x00;
-LCD_WriteCmd (iCmd, 40+10);
+LCD_WriteCmd (iCmd, 40+1);
 }
 
 void LCD_DisplayResults ()
@@ -5215,6 +5221,7 @@ LCD_GoTo (0, 0);
 sprintf(sLine1, "Gals:%4u  %3u%% ", giGals, giPercentFull);
 LCD_WriteLine (sLine1);
 
+__nop();
 LCD_GoTo(1, 0);
 sprintf(sLine2, "Echo:%4u %2u/%2u", giEmptySpace_mm,
 giAirTempC, giAirTempF);
@@ -5226,13 +5233,17 @@ void LCD_WriteCmd (uint8_t iCmd, uint16_t iDelay)
 {
 do { LATAbits.LATA3 = 0; } while(0);
 do { LATAbits.LATA2 = 0; } while(0);
+
+# 72
 do { LATAbits.LATA1 = 1; } while(0);
 LATB = iCmd;
-LATCbits.LATC6 = iCmd>>6;
-LATCbits.LATC7 = iCmd>>7;
+LATC6 = iCmd >> 6;
+LATC7 = iCmd >> 7;
 do { LATAbits.LATA1 = 0; } while(0);
-for (uint8_t i = 0; i<iDelay; i++)
-_delay((unsigned long)((1)*(8000000/4000000.0)));
+
+
+
+LCD_WaitNotBusy();
 }
 
 void LCD_WriteChar(uint8_t iChar)
@@ -5240,14 +5251,29 @@ void LCD_WriteChar(uint8_t iChar)
 do { LATAbits.LATA3 = 1; } while(0);
 do { LATAbits.LATA2 = 0; } while(0);
 
+# 92
 do { LATAbits.LATA1 = 1; } while(0);
 LATB = iChar;
-LATCbits.LATC6 = iChar>>6;
-LATCbits.LATC7 = iChar>>7;
+LATC6 = iChar >> 6;
+LATC7 = iChar >> 7;
 do { LATAbits.LATA1 = 0; } while(0);
-_delay((unsigned long)((40+10)*(8000000/4000000.0)));
+
+
+LCD_WaitNotBusy();
 }
 
+void LCD_WriteNibble(uint8_t iChar)
+{
+do { LATAbits.LATA1 = 1; } while(0);
+LATBbits.LATB4 = iChar;
+LATBbits.LATB5 = iChar >> 1;
+LATCbits.LATC6 = iChar >> 2;
+LATCbits.LATC7 = iChar >> 3;
+do { LATAbits.LATA1 = 0; } while(0);
+
+LCD_WaitNotBusy();
+
+}
 void LCD_WriteString (uint8_t *iData)
 {
 uint8_t ix = 0;
@@ -5270,12 +5296,12 @@ if (bInString)
 if (iData[i] == 0)
 {
 bInString = 0;
-iData[i] = " ";
+iData[i] = 0x20;
 }
 else
 sLine[i] = iData[i];
 } else
-sLine[i] = " ";
+sLine[i] = 0x20;
 }
 sLine[i] = 0;
 LCD_WriteString (sLine);
@@ -5288,17 +5314,22 @@ if (iLine < 2)
 iPos = (iLine == 0) ?
 (0x80 | iCharPos) :
 (0xC0 | iCharPos);
-LCD_WriteCmd (0x80 | iPos, 40+10);
+LCD_WriteCmd (0x80 | iPos, 40+1);
 }
 
 void LCD_ClearScreen ()
 {
 LCD_WriteCmd (0x01, 2000);
-_delay((unsigned long)((2000)*(8000000/4000000.0)));
+
+LCD_WaitNotBusy();
 }
 
-void LCD_Busy()
+void LCD_WaitNotBusy()
 {
-
-# 135
+TRISCbits.RC7 = 1;
+do { LATAbits.LATA2 = 1; } while(0);
+do { LATAbits.LATA3 = 0; } while(0);
+while (PORTCbits.RC7) __nop();
+do { LATAbits.LATA2 = 0; } while(0);
+TRISCbits.RC7 = 0;
 }

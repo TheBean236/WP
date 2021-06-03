@@ -5148,7 +5148,9 @@ typedef uint16_t uintptr_t;
 # 15 "C:\Program Files\Microchip\xc8\v2.20\pic\include\c90\stdbool.h"
 typedef unsigned char bool;
 
-# 53 "Master.h"
+# 74 "Master.h"
+uint16_t gi_SW_Time;
+
 typedef union EchoPeriod_tag
 {
 struct
@@ -5163,7 +5165,7 @@ uint16_t EP16;
 } EchoPeriod_t;
 volatile EchoPeriod_t giEchoCounter;
 
-# 156
+# 178
 volatile char gsCurrDate[] = "01/04/21";
 volatile char gsCurrTime[] = "01:00:00";
 volatile char gsTotalSecs[] = "---";
@@ -5201,11 +5203,10 @@ uint8_t giDay = 1;
 uint8_t giMonth = 4;
 uint8_t giYear = 21;
 
-# 199
+# 221
 uint16_t giBacklight_Timer = 0;
 
-# 27 "TempCalc.c"
-float gfVtherm;
+# 28 "TempCalc.c"
 float gfRtherm;
 float gfRRatio;
 float gfLnRRatio;
@@ -5220,7 +5221,7 @@ PIE1bits.ADIE = 1;
 
 void AN0_ISR()
 {
-giTempCapture = (uint8_t) (ADRESH << 8);
+giTempCapture = (uint16_t) (ADRESH << 8);
 giTempCapture += ADRESL;
 PIR1bits.ADIF = 0;
 gb_TempCaptured = 1;
@@ -5236,10 +5237,14 @@ ADCON0bits.GO = 1;
 
 void ComputeTemp()
 {
-gfVtherm = (5.075 * giTempCapture)/1023;
-gfRtherm = gfVtherm * 4700 / (5.075 - gfVtherm);
+
+{ TMR3H = 0; TMR3L = 0; T3CONbits.TMR3ON = 1;};
+gfRtherm = ((4700.0 * giTempCapture) / (1023 - giTempCapture));
 gfRRatio = gfRtherm / 0.01763227;
+
 gfLnRRatio = log(gfRRatio);
+
+
 gfAirTempC = 3950.0 / gfLnRRatio - 273.15;
 giAirTempC = (int) round(gfAirTempC);
 giAirTempF = (int) round((gfAirTempC * 9 / 5) + 32);
